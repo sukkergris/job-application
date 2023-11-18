@@ -1,0 +1,26 @@
+{
+    "name": "Pulumi",
+    "build": {
+      "dockerfile": "Dockerfile"
+    },
+    "remoteEnv": {
+      "PATH": "${containerEnv:PATH}:/root/.pulumi/bin"
+    },
+    "runArgs": [
+      "--env-file",
+      ".devcontainer/pulumi.env"
+    ],
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "dotnet.sdk": "8.0"
+        },
+        "extensions": [
+          "ms-dotnettools.csharp",
+          "jebbs.plantuml",
+          "k--kato.docomment",
+          "EditorConfig.EditorConfig"
+        ]
+      }
+    }
+  }
