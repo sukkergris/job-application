@@ -1,0 +1,3 @@
+name: job-application
+runtime: dotnet
+description: Static website
