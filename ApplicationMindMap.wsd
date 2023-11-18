@@ -1,0 +1,75 @@
+@startmindmap "The Private Job Application App"
+
+* Development dependencies
+** Tooling
+*** Windows
+****_ WSL2
+*** VS Code
+****_ Copilot
+****_ Devcontainer
+****_ FiraCode
+****_ Vim
+*** Visual Studio 2022
+*** Docker
+****_ Docker Compose
+****_ Docker Desktop
+*** Git
+****_ Git Bash
+****_ Sourcetree
+*** Roslynpad
+*** Postman
+*** Fiddler
+
+** Platforms
+*** Azure
+*** Pulumi
+*** Github
+*** Trello
+*** Microsoft Teams
+
+** App
+*** .NET 8
+*** C# / F#
+*** Blazor
+*** Libraries
+****_ FluentValidation
+****_ MediatR
+****_ Serilog
+****_ Entity Framework Core
+****_ SqlServer
+****_ Paramore.Brighter
+****_ Paramore.Darker
+****_ Polly
+****_ FunctionalExtensions
+*** Middleware
+****_ RabbitMQ
+****_ Redis
+*** Build
+****_ Nuke Build
+****_ Pulumi (Infrastructure as Code)
+
+** Development Philosophy
+*** Domain-Driven Design (DDD)
+*** Test-Driven Development (TDD)
+*** Clean Code Principles
+****_ Readability
+****_ Simplicity
+****_ Consistency
+****_ Modularity
+****_ Testability
+*** SOLID Principles
+****_ Single Responsibility Principle (SRP)
+****_ Open-Closed Principle (OCP)
+****_ Liskov Substitution Principle (LSP)
+****_ Interface Segregation Principle (ISP)
+*** Continuous Integration (CI)
+*** Continuous Deployment (CD)
+*** Agile Methodology
+****_ Scrum
+****_ Kanban
+*** Git Flow (ish)
+*** DevOps Practices
+*** Microservices Architecture
+*** Disaster recovery
+
+@endmindmap
