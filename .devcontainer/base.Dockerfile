@@ -26,6 +26,7 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 ARG PULUMI_VERSION
 RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version $PULUMI_VERSION && \
     mv ~/.pulumi/bin/* /usr/bin
+ENV PATH="$PATH:/root/.pulumi/bin"
 
 # Install .NET SDK 6.0
 RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
@@ -43,6 +44,8 @@ RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod
 
 # Install Nuke Global Tool
 RUN dotnet tool install --global Nuke.GlobalTool
+ENV PATH="$PATH:~/.dotnet/tools"
+
 
 # Set the default shell to zsh
 SHELL ["/bin/zsh"]

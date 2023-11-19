@@ -3,7 +3,7 @@
     "build":{
         "dockerfile": "base.Dockerfile"},
     "remoteEnv": {
-      "PATH": "${containerEnv:PATH}:/root/.pulumi/bin"
+      "PATH": "${containerEnv:PATH}:~/.dotnet/tools:/root/.pulumi/bin"
     },
     "runArgs": [
         "--env-file",
