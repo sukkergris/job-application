@@ -13,7 +13,7 @@
     "customizations": {
       "vscode": {
         "settings": {
-          "dotnet.sdk": "8.0"
+          "dotnet.sdk": "6.0"
         },
         "extensions": [
           "ms-dotnettools.csharp",
