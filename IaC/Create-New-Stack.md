@@ -1,4 +1,4 @@
-# Add Stack
+# Create New Stack
 
 Before starting the `Dev Container`: [Prepare the environment](Use-The-Dev-Container.md)
 

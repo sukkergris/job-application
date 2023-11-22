@@ -44,6 +44,9 @@ RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod
 
 # Install Nuke Global Tool
 RUN dotnet tool install --global Nuke.GlobalTool
+RUN dotnet tool install --global dotnet-ef
+RUN dotnet tool install --global dotnet-format
+
 ENV PATH="$PATH:~/.dotnet/tools"
 
 

@@ -28,6 +28,8 @@ return await Deployment.RunAsync(() =>
         AccountTier = "Standard"
     });
 
+    
+
     // Export the connection string for the storage account
     return new Dictionary<string, object?>
     {
