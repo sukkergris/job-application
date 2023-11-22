@@ -5,7 +5,7 @@ The purpose of this project is to give the foundation to create, deploy and main
 
 ## Building blocks
 
-![System overview](/out/System-Overview/System%20overview.svg "mindmap").
+![System overview](/Documentation/System%20overview.svg "mindmap").
 
 # Getting started
 
@@ -19,4 +19,4 @@ First buy your domain name. Eg. at [GoDaddy](https://dk.godaddy.com/domains) *NO
 
 1. [Azure](https://portal.azure.com/)
 2. [Pulumi](https://pulumi.com)
-3. [Mailchimp](https://mailchimp.com/)
+3. [mailchimp](https://mailchimp.com/)
