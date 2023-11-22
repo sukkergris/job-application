@@ -21,24 +21,43 @@ class Build : NukeBuild
 
     public static int Main () => Execute<Build>(x => x.Compile);
 
+    AbsolutePath IaCDir => RootDirectory / "IaC";
+
+    AbsolutePath SourceDir => RootDirectory / "src";
+
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+#region Infrastructure
+    Target ProvisionInfrastructure => _ => _.Executes(GoProvisionInfrastructure);
+    private void GoProvisionInfrastructure(){
 
-    Target Clean => _ => _
-        .Before(Restore)
-        .Executes(() =>
-        {
-        });
+    }
+#endregion
+#region Clean
+    Target Clean => _ => _.Executes(GoClean);
+
+    private void GoClean(){
+        SourceDir.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+    }
+#endregion
+#region  Restore
+    // first 'Clean' then 'GoRestore' then STOP. 
+    Target AndRestore => _ => _.DependsOn(ProvisionInfrastructure, Clean).Executes(GoRestore);
 
     Target Restore => _ => _
-        .Executes(() =>
-        {
-        });
+        .Executes(GoRestore);
+    // The work to be done. This makes it possible to run just one specific step at the time. Dependend upon the caller making sure the state is correct before calling.
+    private void GoRestore(){
+
+    }
+#endregion
 
     Target Compile => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
         });
+
+
 
 }
