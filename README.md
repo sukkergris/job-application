@@ -5,27 +5,18 @@ The purpose of this project is to give the foundation to create, deploy and main
 
 ## Building blocks
 
-``` plantuml
-
-* Git
-* .NET c#
-* Docker
-* dev container
-* Services
-** Azure
-***_ App Function
-** MailChimp
-***_ Free (1000 mails/month)
-** Github
-*** Github actions
-* Build
-**_ Nuke Build
-* IaC
-**_ Pulumi
-* Documentation
-**_ MD
-**_ Plantuml
-
-```
+![System overview](/out/System-Overview/System%20overview.svg "mindmap").
 
 # Getting started
+
+In order to use this solution as it was intended you'll need some accounts and your own domain name. Plus you will need to be able to add som dns records on the way.
+
+## Acquire your domain name
+
+First buy your domain name. Eg. at [GoDaddy](https://dk.godaddy.com/domains) *NO RECOMMENDATIONS*
+
+## Create accounts
+
+1. [Azure](https://portal.azure.com/)
+2. [Pulumi](https://pulumi.com)
+3. [Mailchimp](https://mailchimp.com/)
