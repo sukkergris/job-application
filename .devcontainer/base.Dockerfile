@@ -26,6 +26,7 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 ARG PULUMI_VERSION
 RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version $PULUMI_VERSION && \
     mv ~/.pulumi/bin/* /usr/bin
+    
 ENV PATH="$PATH:/root/.pulumi/bin"
 
 # Install .NET SDK 6.0

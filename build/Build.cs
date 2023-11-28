@@ -6,7 +6,9 @@ using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Pulumi;
 using Nuke.Common.Utilities.Collections;
+using Serilog;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
@@ -21,23 +23,39 @@ class Build : NukeBuild
 
     public static int Main () => Execute<Build>(x => x.Compile);
 
-    AbsolutePath IaCDir => RootDirectory / "IaC";
+    AbsolutePath IaC_Job_Application_Dir => RootDirectory / "IaC/job-application";
 
-    AbsolutePath SourceDir => RootDirectory / "src";
+    AbsolutePath SourceCodeDir => RootDirectory / "src";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    
+    [Parameter("Environment to build - Default is 'dev'")]
+    readonly string Environment = "dev";
+
+    [Parameter("Pulumi Access Toke")]
+    readonly string PULUMI_ACCESS_TOKEN = "GET FROM ENVIRONMENT VARIABLE OR GO HOME";
+    readonly string pulumiStackEnvironment = "dev"; // #todo: Resolve depending on the environment
+
+    readonly string pulumiStackName = "job-application"; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
+
 #region Infrastructure
     Target ProvisionInfrastructure => _ => _.Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure(){
-
+            PulumiTasks.PulumiUp(_ => _
+                .SetCwd(IaC_Job_Application_Dir)
+                .SetStack($"{pulumiStackName}/{pulumiStackEnvironment}")
+                .EnableSkipPreview()
+                .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PULUMI_ACCESS_TOKEN));
+            
     }
 #endregion
 #region Clean
     Target Clean => _ => _.Executes(GoClean);
 
     private void GoClean(){
-        SourceDir.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+        Log.Information("Cleaning up source code directories"); //Nuke Build Telemetry: https://nuke.build/docs/fundamentals/logging/
+        SourceCodeDir.GlobDirectories("**/bin", "**/obj").DeleteDirectories();
     }
 #endregion
 #region  Restore
@@ -51,13 +69,11 @@ class Build : NukeBuild
 
     }
 #endregion
-
+#region Compile
+    Target AndCompile => _ => _.DependsOn(AndRestore).Executes(GoCompile);
     Target Compile => _ => _
-        .DependsOn(Restore)
-        .Executes(() =>
-        {
-        });
-
-
+        .Executes(GoCompile);
+    private void GoCompile(){}
+#endregion
 
 }

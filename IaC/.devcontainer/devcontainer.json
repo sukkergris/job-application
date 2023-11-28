@@ -1,14 +1,14 @@
 {
     "name": "Pulumi",
     "build": {
-      "dockerfile": "Dockerfile"
+      "dockerfile": "../.devcontainer/Dockerfile"
     },
     "remoteEnv": {
       "PATH": "${containerEnv:PATH}:/root/.pulumi/bin"
     },
     "runArgs": [
       "--env-file",
-      ".devcontainer/pulumi.env"
+      "../.devcontainer/pulumi.env"
     ],
     "customizations": {
       "vscode": {

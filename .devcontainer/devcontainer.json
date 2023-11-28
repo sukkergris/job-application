@@ -8,5 +8,13 @@
     "runArgs": [
         "--env-file",
         ".devcontainer/pulumi.env"
-    ]
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"virgilsisoe.nuke-tools",
+				"ms-dotnettools.csdevkit"
+			]
+		}
+	}
 }
