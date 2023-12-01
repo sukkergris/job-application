@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Heiselberg.Mails": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7088",
+      "launchBrowser": false
+    }
+  }
+}

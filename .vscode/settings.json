@@ -6,6 +6,7 @@
         "mailchimp",
         "northeurope",
         "plantuml",
-        "Pulumi"
+        "Pulumi",
+        "Serilog"
     ]
 }

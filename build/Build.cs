@@ -1,3 +1,4 @@
+using Serilog;
 using System;
 using System.Linq;
 using Nuke.Common;
@@ -6,9 +7,9 @@ using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Pulumi;
 using Nuke.Common.Utilities.Collections;
-using Serilog;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
@@ -64,9 +65,9 @@ class Build : NukeBuild
 
     Target Restore => _ => _
         .Executes(GoRestore);
-    // The work to be done. This makes it possible to run just one specific step at the time. Dependend upon the caller making sure the state is correct before calling.
+    // The work to be done. This makes it possible to run just one specific step at the time. Depended upon the caller making sure the state is correct before calling.
     private void GoRestore(){
-        
+        DotNetTasks.DotNetRestore(settings => settings.SetProjectFile())
     }
 #endregion
 #region Compile
