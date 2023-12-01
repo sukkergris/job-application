@@ -1,0 +1,26 @@
+@startmindmap "System overview"
+* System
+** Git
+** .NET c#
+** Docker
+** dev container
+** Services
+*** Azure
+****_ App Function
+****_ Static Website
+*** [[https://mailchimp.com MailChimp]]
+****_ [[https://us8.admin.mailchimp.com/account/client-key/ Api key - Free (1000 mails/month)]]
+*** Github
+**** Github actions
+** Build
+*** [[https://nuke.build/ Nuke Build]]
+** IaC
+*** [[https://www.pulumi.com/ Pulumi]]
+****_ [[https://www.pulumi.com/registry/packages/azure/api-docs/appservice/functionapp/ App Function]]
+****_ [[https://www.pulumi.com/templates/static-website/azure/ Static Website]]
+
+** Documentation
+***_ MD
+***_ [[https://plantuml.com/ Plantuml]]
+
+@endmindmap

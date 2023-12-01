@@ -10,3 +10,8 @@
 pulumi stack init <not sure if you need to write a name for it here>
 pulumi up
 ```
+
+## Working with an organization
+
+To set an organization as your default organization:
+`pulumi org set-default young-heiselberg`

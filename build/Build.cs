@@ -13,6 +13,9 @@ using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
+using System.IO.Compression;
+using ICSharpCode.SharpZipLib.Zip;
+using System.IO;
 
 class Build : NukeBuild
 {
@@ -21,60 +24,115 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
+    public Build()
+    {
+        PULUMI_ACCESS_TOKEN = System.Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN") ?? throw new ArgumentNullException();
+    }
+    public static int Main() => Execute<Build>(x => x.Compile);
 
-    public static int Main () => Execute<Build>(x => x.Compile);
+    #region Configurations
+    // Azure Function Config
 
-    AbsolutePath IaC_Job_Application_Dir => RootDirectory / "IaC/job-application";
+    #endregion
+    readonly string dotnetVersion = "net6.0";
+    readonly string dotnetRuntime = "linux-x64";
+    readonly string heiselberg_mails = "Heiselberg.Mails";
+    #region Paths
+
+    AbsolutePath IaC_Root_Dir => RootDirectory / "IaC";
 
     AbsolutePath SourceCodeDir => RootDirectory / "src";
 
+    AbsolutePath PublishDir => SourceCodeDir / $"{heiselberg_mails}/bin/{Configuration}/{dotnetRuntime}/Publish";
+    AbsolutePath ArtifactsDir => RootDirectory / "artifacts";
+    AbsolutePath ZipDir => ArtifactsDir / $"app.zip";
+    #endregion
+
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
-    
+
     [Parameter("Environment to build - Default is 'dev'")]
     readonly string Environment = "dev";
 
     [Parameter("Pulumi Access Toke")]
     readonly string PULUMI_ACCESS_TOKEN = "GET FROM ENVIRONMENT VARIABLE OR GO HOME";
-    readonly string pulumiStackEnvironment = "dev"; // #todo: Resolve depending on the environment
 
-    readonly string pulumiStackName = "job-application"; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
+    #region Static names
+    readonly string organization = "young-heiselberg";
+    readonly string jobApplication = "job-application"; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
+    readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
+    string jobApplicationStack => $"{organization}/{jobApplication}/{stackEnvironment}";
+    #endregion
 
-#region Infrastructure
-    Target ProvisionInfrastructure => _ => _.Executes(GoProvisionInfrastructure);
-    private void GoProvisionInfrastructure(){
-            PulumiTasks.PulumiUp(_ => _
-                .SetCwd(IaC_Job_Application_Dir)
-                .SetStack($"{pulumiStackName}/{pulumiStackEnvironment}")
-                .EnableSkipPreview()
-                .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PULUMI_ACCESS_TOKEN));
-            
-    }
-#endregion
-#region Clean
+    #region Chained Targets
     Target Clean => _ => _.Executes(GoClean);
+    Target AndRestore => _ => _.DependsOn(Clean).Executes(GoRestore);
+    Target AndCompile => _ => _.DependsOn(AndRestore).Executes(GoCompile);
+    Target AndZip => _ => _.DependsOn(AndCompile).Executes(GoZip);
+    #endregion
 
-    private void GoClean(){
+    #region Infrastructure
+    Target IaC => _ => _.Executes(GoProvisionInfrastructure);
+    private void GoProvisionInfrastructure()
+    {
+        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / jobApplication ).SetStackName(jobApplicationStack));
+
+        PulumiTasks.PulumiUp(_ => _
+            .SetCwd(IaC_Root_Dir / jobApplication)
+            .SetStack(jobApplicationStack)
+            .EnableSkipPreview()
+            .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PULUMI_ACCESS_TOKEN));
+    }
+    #endregion
+    #region Clean
+    private void GoClean()
+    {
         Log.Information("Cleaning up source code directories"); //Nuke Build Telemetry: https://nuke.build/docs/fundamentals/logging/
         SourceCodeDir.GlobDirectories("**/bin", "**/obj").DeleteDirectories();
-    }
-#endregion
-#region  Restore
-    // first 'Clean' then 'GoRestore' then STOP. 
-    Target AndRestore => _ => _.DependsOn(ProvisionInfrastructure, Clean).Executes(GoRestore);
 
+        //AbsolutePath.CreateOrCleanDirectory(ArtifactsDir);
+        EnsureCleanDirectory(ArtifactsDir);
+    }
+    #endregion
+    #region  Restore
+    // first 'Clean' then 'GoRestore' then STOP.
     Target Restore => _ => _
         .Executes(GoRestore);
     // The work to be done. This makes it possible to run just one specific step at the time. Depended upon the caller making sure the state is correct before calling.
-    private void GoRestore(){
-        DotNetTasks.DotNetRestore(settings => settings.SetProjectFile())
+    private void GoRestore()
+    {
+        DotNetTasks.DotNetRestore(settings => settings
+            .SetProjectFile(SourceCodeDir / $"{heiselberg_mails}/Heiselberg.Mails.csproj")
+            .SetRuntime("linux-x64"));
     }
-#endregion
-#region Compile
-    Target AndCompile => _ => _.DependsOn(AndRestore).Executes(GoCompile);
+    #endregion
+    #region Compile
     Target Compile => _ => _
         .Executes(GoCompile);
-    private void GoCompile(){}
-#endregion
+    private void GoCompile()
+    {
+        DotNetTasks.DotNetPublish(settings => settings
+            .SetProject(SourceCodeDir / $"{heiselberg_mails}/Heiselberg.Mails.csproj")
+            .SetConfiguration(Configuration)
+            .EnableNoRestore() // We have already restored in 'GoRestore'
+            .SetSelfContained(true)
+            .SetRuntime(dotnetRuntime)
+            .SetFramework(dotnetVersion)
+            .SetOutput(PublishDir)
+            );
+    }
+    #endregion
+    #region Zip
+    Target Zip => _ => _
+        .Executes(GoZip);
+    void GoZip()
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(ZipDir));
+        System.IO.Compression.ZipFile.CreateFromDirectory(PublishDir, ZipDir);
+    }
+    #endregion
 
+    #region Deploy
+
+    #endregion
 }
