@@ -66,7 +66,7 @@ class Build : NukeBuild
         .Executes(GoRestore);
     // The work to be done. This makes it possible to run just one specific step at the time. Dependend upon the caller making sure the state is correct before calling.
     private void GoRestore(){
-
+        
     }
 #endregion
 #region Compile

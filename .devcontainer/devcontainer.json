@@ -13,7 +13,10 @@
 		"vscode": {
 			"extensions": [
 				"virgilsisoe.nuke-tools",
-				"ms-dotnettools.csdevkit"
+				"ms-dotnettools.csdevkit",
+				"humao.rest-client",
+				"ms-dotnettools.vscode-dotnet-runtime",
+				"streetsidesoftware.code-spell-checker"
 			]
 		}
 	}
