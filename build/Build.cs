@@ -40,9 +40,7 @@ class Build : NukeBuild
     #region Paths
 
     AbsolutePath IaC_Root_Dir => RootDirectory / "IaC";
-
     AbsolutePath SourceCodeDir => RootDirectory / "src";
-
     AbsolutePath PublishDir => SourceCodeDir / $"{heiselberg_mails}/bin/{Configuration}/{dotnetRuntime}/Publish";
     AbsolutePath ArtifactsDir => RootDirectory / "artifacts";
     AbsolutePath ZipDir => ArtifactsDir / $"app.zip";
