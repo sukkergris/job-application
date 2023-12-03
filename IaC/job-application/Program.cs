@@ -1,5 +1,7 @@
 ﻿using Pulumi;
 using Pulumi.Azure.AppService;
+using Pulumi.Azure.AppService.Inputs;
+using Pulumi.Azure.AppService.Outputs;
 using Pulumi.Azure.Core;
 using System.Collections.Generic;
 
@@ -34,22 +36,25 @@ return await Deployment.RunAsync(() =>
         PublicNetworkAccessEnabled = true
     });
 
-    var appServicePlan = new Pulumi.Azure.AppService.ServicePlan($"{application}-{environment}", new()
+    var appServicePlan = new Pulumi.Azure.AppService.ServicePlan($"{application}-{environment}-", new()
     {
         ResourceGroupName = resourceGroup.Name,
         Location = resourceGroup.Location,
         OsType = "Linux",
-        SkuName = "F1",// Free
+        SkuName = "Y1", // pay-as-you-go
     });
 
-    var linuxFunctionApp = new LinuxFunctionApp($"lifa-{application}-{environment}", new()
+    var linuxFunctionApp = new LinuxFunctionApp($"{application}-{environment}-", new()
     {
         ResourceGroupName = resourceGroup.Name,
         Location = resourceGroup.Location,
         StorageAccountName = storageAccount.Name,
         StorageAccountAccessKey = storageAccount.PrimaryAccessKey,
         ServicePlanId = appServicePlan.Id,
-        SiteConfig = null
+        SiteConfig = new LinuxFunctionAppSiteConfigArgs
+        {
+            
+        }
     });
 
     // Export the connection string for the storage account
@@ -57,6 +62,7 @@ return await Deployment.RunAsync(() =>
     {
         // ["connectionString"] = storageAccount.PrimaryConnectionString
         ["ResourceGroupId"] = resourceGroup.Id, // Is getting parsed to output after a propper run
-        ["Secret"] = secret // Is getting parsed to output even on pre-run
+        ["Secret"] = secret, // Is getting parsed to output even on pre-run
+        ["LinuxFunctionApp"] = linuxFunctionApp.Id
     };
 });

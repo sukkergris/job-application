@@ -56,7 +56,7 @@ class Build : NukeBuild
     readonly string PULUMI_ACCESS_TOKEN = "GET FROM ENVIRONMENT VARIABLE OR GO HOME";
 
     #region Static names
-    readonly string organization = "young-heiselberg";
+    readonly string organization = "sukkergris"; // "sukkergris"
     readonly string jobApplication = "job-application"; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
     readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
     string jobApplicationStack => $"{organization}/{jobApplication}/{stackEnvironment}";
