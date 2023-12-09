@@ -7,6 +7,7 @@ using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Pulumi;
 using Nuke.Common.Utilities.Collections;
@@ -16,6 +17,7 @@ using static Nuke.Common.IO.PathConstruction;
 using System.IO.Compression;
 using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
+using Azure.Identity;
 
 class Build : NukeBuild
 {
@@ -67,13 +69,14 @@ class Build : NukeBuild
     Target AndRestore => _ => _.DependsOn(Clean).Executes(GoRestore);
     Target AndCompile => _ => _.DependsOn(AndRestore).Executes(GoCompile);
     Target AndZip => _ => _.DependsOn(AndCompile).Executes(GoZip);
+    Target AndDeploy => _ => _.DependsOn(AndZip).Executes(GoDeploy);
     #endregion
 
     #region Infrastructure
     Target IaC => _ => _.Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
-        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / jobApplication ).SetStackName(jobApplicationStack));
+        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / jobApplication).SetStackName(jobApplicationStack));
 
         PulumiTasks.PulumiUp(_ => _
             .SetCwd(IaC_Root_Dir / jobApplication)
@@ -131,6 +134,13 @@ class Build : NukeBuild
     #endregion
 
     #region Deploy
+
+    Target Deploy => _ => _
+        .Executes(GoDeploy);
+    private void GoDeploy()
+    {
+
+    }
 
     #endregion
 }

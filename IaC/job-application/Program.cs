@@ -12,7 +12,7 @@ return await Deployment.RunAsync(() =>
     var azureConfig = new Config("azure"); // Pulumi.{stack}.yaml
     var azLocation = azureConfig.Require("location");
     var resourceType = "rg";
-    var application = "heisconform";
+    var application = "heisconform"; // heiselberg-contact-form
 
     var environment = Deployment.Instance.StackName;
 
