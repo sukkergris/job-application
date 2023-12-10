@@ -13,16 +13,14 @@ In order to use this solution as it was intended you'll need some accounts and y
 
 ## Acquire your domain name (1 hour)
 
-First buy your domain name. Eg. at [GoDaddy](https://dk.godaddy.com/domains) *NO RECOMMENDATIONS*
-
-#todo: Descripe how to handle dns - maybe using azure?
+First buy your domain name. Eg. at [GoDaddy](https://dk.godaddy.com/domains) or [Cloudflare](https://dash.cloudflare.com/) *NO RECOMMENDATIONS*
 
 ## Create accounts
 
 1. [Azure](https://portal.azure.com/)
 2. [Pulumi](https://pulumi.com)
 3. [mailchimp](https://mailchimp.com/)
-4. #todo: Select and setup CAPTCHA  
+4. [Cloudflare](https://dash.cloudflare.com/)
 
 ## Setting up Azure (1 hour)
 
@@ -45,7 +43,7 @@ You will need the paied version in order to use organizations. It's cheep though
 1. Create an account
 2. Add an organization
 3. Add your devs to your organization
-4. Your devs will do the rest #todo: needs testing that the dev can add new stacks to the org.
+4. Your devs will do the rest `#todo: needs testing that the dev can add new stacks to the org`
 5. Make this stack your own. [Add This Code To Your Stacks](/IaC/_doc_Add-This-Code-To-Your-Stack.md)
 
 ## Setting up mailchimp
