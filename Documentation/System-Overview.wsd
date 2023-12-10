@@ -1,23 +1,31 @@
 @startmindmap "System overview"
 * System
-** Git
-** .NET c#
-** Docker
-** dev container
+** Tooling
+*** Git
+*** .NET c#
+*** Docker
+*** [[https://code.visualstudio.com/docs/devcontainers/containers devcontainers]]
 ** Services
+*** IaC
+**** [[https://www.pulumi.com/ Pulumi]]
+*****_ [[https://www.pulumi.com/registry/packages/azure/api-docs/appservice/functionapp/ App Function]]
+*****_ [[https://www.pulumi.com/templates/static-website/azure/ Static Website]]
+*** [[https://www.cloudflare.com CLOUDFLARE]]
+****_ CAPTCHA
 *** Azure
 ****_ App Function
 ****_ Static Website
+****_ DNS
 *** [[https://mailchimp.com MailChimp]]
 ****_ [[https://us8.admin.mailchimp.com/account/client-key/ Api key - Free (1000 mails/month)]]
-*** Github
+*** [[https://github.com/ Github]]
 **** Github actions
-** Build
+** Build and Deploy
 *** [[https://nuke.build/ Nuke Build]]
-** IaC
-*** [[https://www.pulumi.com/ Pulumi]]
-****_ [[https://www.pulumi.com/registry/packages/azure/api-docs/appservice/functionapp/ App Function]]
-****_ [[https://www.pulumi.com/templates/static-website/azure/ Static Website]]
+*** [[https://learn.microsoft.com/en-us/rest/api/azure/ azure rest api]]
+*** [[https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push zip deploy]]
+** Automation
+***_ Github actions
 
 ** Documentation
 ***_ MD
