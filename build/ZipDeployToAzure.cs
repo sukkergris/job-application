@@ -1,17 +1,31 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Identity;
 
 namespace _build;
 
-public static class ZipDeployToAzure
-{ public static async Task Now()
+public static class ZipDeploy
+{
+    public static AzureFunction ThisArtifact(Uri artifact)
     {
-
-        // https://learn.microsoft.com/en-us/azure/governance/resource-graph/first-query-rest-api
-        var azCredential = new DefaultAzureCredential();
-        var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
-        var azAccessToken = await azCredential.GetTokenAsync(tokenRequestContext);
-        var managementClient = 
+        return new AzureFunction(artifact);
+    }
+    public  class AzureFunction
+    {
+        public AzureFunction(Uri artifact)
+        {
+            _artifact = artifact;
+        }
+        readonly Uri _artifact;
+        public static async Task ToAzureFunction()
+        {
+            // https://learn.microsoft.com/en-us/azure/governance/resource-graph/first-query-rest-api
+            var azCredential = new DefaultAzureCredential();
+            var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
+            var azAccessToken = await azCredential.GetTokenAsync(tokenRequestContext);
+            var managementClient = 
+    }
     }
 }

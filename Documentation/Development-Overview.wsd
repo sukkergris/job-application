@@ -1,0 +1,10 @@
+@startmindmap "Development Overview"
+
+* Code
+** Azure Function
+***_ [[https://www.nuget.org/packages/MailChimp.Net.V3 MailChimp.Net]]
+** Deployment
+***_ [[https://learn.microsoft.com/en-us/dotnet/api/overview/azure/?view=azure-dotnet azure-dotnet]]
+***_ [[https://learn.microsoft.com/en-us/rest/api/azure/ azure rest api]]
+
+@endmindmap

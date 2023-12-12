@@ -7,7 +7,7 @@
     },
     "runArgs": [
         "--env-file",
-        ".devcontainer/pulumi.env"
+        ".devcontainer/secret.env"
 	],
 	"customizations": {
 		"vscode": {
