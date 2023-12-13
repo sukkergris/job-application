@@ -1,0 +1,18 @@
+name: Run Azure Login with OIDC
+#on: [push]
+on:
+  workflow_dispatch:
+
+permissions:
+      id-token: write
+      contents: read
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secretes.AZURE_CREDENTIALS }}
+      - run: |
+          az webapp list --query "[?state='Running']"
