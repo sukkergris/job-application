@@ -49,7 +49,7 @@ You will need the payed version in order to use organizations. It's cheep though
 6. Acquire your [Personal access token](https://app.pulumi.com/sukkergris/settings/tokens)
 7. COPY AND STORE THIS TOKEN SECURELY
 
-## Setting up mailchimp
+## Setting up mailchimp (Hour estimate)
 
 The free version will let you send 1.000 mails from your subscription.
 For most minor contact forms this should be enough.
@@ -58,30 +58,35 @@ For most minor contact forms this should be enough.
 
 `#todo: Setup domain, manage integrations`
 
-## Setting up CLOUDFLARE
+## Setting up CLOUDFLARE (Hour estimate)
 
  1. Add CAPTCHA
 
-## Setting up GitHub
+## Setting up GitHub (1 hour)
 
 In order to login to azure when running an github action. A service principle is created.
 
 **In the console use the following commands:**
 
-1. az login
-2. az ad sp create-for-rbac --name "YOUR_NEW_SERVICE_PRINCIPAL_NAME" --role contributor --scope /subscriptions/YOUR_SUBSCRIPTION_ID_HERE --sdk-auth
+## Create SP using hardcoded values (or see next step)
 
-## Create using Env Variables
+1. az login
+2. Set default subscription: az account set --subscription $Env:AZURE_SUBSCRIPTION_I
+3. az ad sp create-for-rbac --name "YOUR_NEW_SERVICE_PRINCIPAL_NAME" --role contributor --scope /subscriptions/YOUR_SUBSCRIPTION_ID_HERE --sdk-auth
+
+## Create SP using Env Variables
 
 1. Read `.devcontainer/secrets.env` into the session
 2. Run: `read-env-var-from.secrets.env.ps1`
 3. Run: `az ad sp create-for-rbac --name "{YOUR_NEW_SERVICE_PRINCIPAL_NAME}" --role contributor --scope /subscriptions/$Env:AZURE_SUBSCRIPTION_ID --sdk-auth`
 
-Copy the json output.
-Go to [Actions secrets and variables](https://github.com/sukkergris/job-application/settings/secrets/actions)
-Paste the entire json into a `Repository Secret` named 'AZURE_CREDENTIALS'
+## Apply SP
 
-# Running Nuke Build
+1. Copy the json output.
+2. Go to [Actions secrets and variables](https://github.com/sukkergris/job-application/settings/secrets/actions)
+3. Paste the entire json into a `Repository Secret` named 'AZURE_CREDENTIALS'
+
+# Running Nuke Build (Hour estimate)
 
 This template/project is meant to run in a devcontainer.
 
