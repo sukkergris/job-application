@@ -1,0 +1,39 @@
+@startuml "Azure RBAC"
+
+entity "Security Principal" as sp {
+    * User
+    * Group
+    * Service Principal
+    * Managed identity
+}
+
+entity Role {
+    * Permissions
+}
+note top: Eg. Owner, Contributer,\nReader etc.
+entity "Cusotm Role" as cr {
+
+}
+
+
+entity "Resurce Specific Role" as rsr {
+    * Eg. blob
+}
+note top: Build in
+
+entity Scope {
+    * Management Groups
+    * Subscriptions
+    * Resurce Groups
+    * Resources
+}
+note left: Permissions
+
+Role -- cr
+Role -- rsr
+
+sp -- Scope
+sp -- Role
+
+
+@enduml

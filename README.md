@@ -27,7 +27,7 @@ First buy your domain name. Eg. at [GoDaddy](https://dk.godaddy.com/domains) or 
 
 ### Add Subscription
 
-If you have an existing subscription it's possible to use that one. **Not recomended!**
+If you have an existing subscription it's possible to use that one. **Thi is NOT recomended!**
 
 After creating your azure account go to the [`Subscriptions` (Portal)](https://portal.azure.com/#view/Microsoft_Azure_Billing/SubscriptionsBladeV2) and add a new subscription.
 
@@ -66,13 +66,20 @@ For most minor contact forms this should be enough.
 
 In order to login to azure when running an github action. A service principle is created.
 
-1.
+**In the console use the following commands:**
 
-```plantuml
+1. az login
+2. az ad sp create-for-rbac --name "YOUR_NEW_SERVICE_PRINCIPAL_NAME" --role contributor --scope /subscriptions/YOUR_SUBSCRIPTION_ID_HERE --sdk-auth
 
+## Create using Env Variables
 
+1. Read `.devcontainer/secrets.env` into the session
+2. Run: `read-env-var-from.secrets.env.ps1`
+3. Run: `az ad sp create-for-rbac --name "{YOUR_NEW_SERVICE_PRINCIPAL_NAME}" --role contributor --scope /subscriptions/$Env:AZURE_SUBSCRIPTION_ID --sdk-auth`
 
-```
+Copy the json output.
+Go to [Actions secrets and variables](https://github.com/sukkergris/job-application/settings/secrets/actions)
+Paste the entire json into a `Repository Secret` named 'AZURE_CREDENTIALS'
 
 # Running Nuke Build
 
@@ -83,7 +90,8 @@ This template/project is meant to run in a devcontainer.
 * Pulumi access toke
 * Azure subscription id
 
-1. In `.devcontainer` add a file named `secret.env`
+1. In `.devcontainer` add a file named `secrets.env`
 2. Add these lines
-    a. PULUMI_ACCESS_TOKEN={'YOUR_PULUMI_TOKEN_HERE'}
-    b. AZURE_SUBSCRIPTION_ID={'YOUR_SELECTED_AZURE_SUBSCRIPTION_HERE'}
+
+* PULUMI_ACCESS_TOKEN={'YOUR_PULUMI_TOKEN_HERE'}
+* AZURE_SUBSCRIPTION_ID={'YOUR_SELECTED_AZURE_SUBSCRIPTION_HERE'}

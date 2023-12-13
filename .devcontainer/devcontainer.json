@@ -7,7 +7,7 @@
     },
     "runArgs": [
         "--env-file",
-        ".devcontainer/secret.env"
+        ".devcontainer/secrets.env"
 	],
 	"customizations": {
 		"vscode": {

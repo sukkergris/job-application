@@ -1,0 +1,5 @@
+@startuml "Azure ABAC - Attribute Based Access Control"
+
+entity Hello
+
+@enduml
