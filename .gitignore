@@ -2,8 +2,6 @@
 /out/
 **/*.secret
 **/secrets.env
-**/parameters.*.json
-!**/parameters.json
 ## Ignore /build/Porperties/launchSettings.json
 ## Each dev must chose and setup how to debug in hes/hers prefered environment
 

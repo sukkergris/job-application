@@ -18,7 +18,11 @@ using System.IO.Compression;
 using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
 using Azure.Identity;
+using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Tools.AzureSignTool;
+using Azure.Core;
 
+[GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnWorkflowDispatchOptionalInputs = new string[] { "" })]// OnPushBranches = new[] { "main" })]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -26,7 +30,7 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.Compile);
+    public static int Main() => Execute<Build>(x => x.LoginToAzure);
 
     #region Configurations
     // Azure Function Config
@@ -43,7 +47,6 @@ class Build : NukeBuild
     AbsolutePath ArtifactsDir => RootDirectory / "artifacts";
     AbsolutePath ZipDir => ArtifactsDir / $"app.zip";
     #endregion
-
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
@@ -51,13 +54,18 @@ class Build : NukeBuild
     readonly string Environment = "dev";
 
     [Parameter("PULUMI_ACCESS_TOKEN")]
-    readonly string PulumiAccessToken = "GET FROM ENVIRONMENT VARIABLE OR GO HOME";
+    readonly string PulumiAccessToken;
 
-    #region Static names
-    readonly string organization = "sukkergris"; // "sukkergris"
-    readonly string jobApplication = "job-application"; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
+    #region Static names - magic strings
+    
+    [Parameter("PULUMI_ORGANIZATION")]
+    readonly string PulumiOrganization;
+
+    [Parameter("PULUMI_STACKNAME")]
+    readonly string stack; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
+    
     readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
-    string jobApplicationStack => $"{organization}/{jobApplication}/{stackEnvironment}";
+    string stackName => $"{PulumiOrganization}/{stack}/{stackEnvironment}";
     #endregion
 
     #region Chained Targets
@@ -69,14 +77,14 @@ class Build : NukeBuild
     #endregion
 
     #region Infrastructure
-    Target IaC => _ => _.Executes(GoProvisionInfrastructure);
+    Target IaC => _ => _.Requires(() => PulumiAccessToken).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
-        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / jobApplication).SetStackName(jobApplicationStack));
+        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / stack).SetStackName(stackName));
 
         PulumiTasks.PulumiUp(_ => _
-            .SetCwd(IaC_Root_Dir / jobApplication)
-            .SetStack(jobApplicationStack)
+            .SetCwd(IaC_Root_Dir / stack)
+            .SetStack(stackName)
             .EnableSkipPreview()
             .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
     }
@@ -95,7 +103,6 @@ class Build : NukeBuild
     // first 'Clean' then 'GoRestore' then STOP.
     Target Restore => _ => _
         .Executes(GoRestore);
-    // The work to be done. This makes it possible to run just one specific step at the time. Depended upon the caller making sure the state is correct before calling.
     private void GoRestore()
     {
         DotNetTasks.DotNetRestore(settings => settings
@@ -128,7 +135,6 @@ class Build : NukeBuild
         System.IO.Compression.ZipFile.CreateFromDirectory(PublishDir, ZipDir);
     }
     #endregion
-
     #region Deploy
 
     Target Deploy => _ => _
@@ -137,6 +143,20 @@ class Build : NukeBuild
     {
 
     }
-
+    #endregion
+    #region AzureTasks
+    [Parameter("AZURE_CLIENT_ID")]
+    readonly string AzureClientID;
+    [Parameter("AZURE_CLIENT_SECRET")]
+    readonly string AzureClientSecret;
+    [Parameter("AZURE_TENANT_ID")]
+    readonly string AzureTenantId;
+    Target LoginToAzure => _ => _.Requires(() => AzureClientID).Requires(() => AzureClientSecret).Requires(() => AzureTenantId).Executes(() =>
+    {
+        ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientID} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
+        var azCredential = new DefaultAzureCredential();
+        var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
+        var azAccessToken = azCredential.GetToken(tokenRequestContext);        Log.Debug("azAccessToken", azAccessToken.Token);
+    });
     #endregion
 }
