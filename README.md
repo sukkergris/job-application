@@ -27,7 +27,7 @@ First buy your domain name. Eg. at [GoDaddy](https://dk.godaddy.com/domains) or 
 
 ### Add Subscription
 
-If you have an existing subscription it's possible to use that one. **Thi is NOT recomended!**
+If you have an existing subscription it's possible to use that one. **This is NOT recomended!**
 
 After creating your azure account go to the [`Subscriptions` (Portal)](https://portal.azure.com/#view/Microsoft_Azure_Billing/SubscriptionsBladeV2) and add a new subscription.
 
@@ -98,5 +98,5 @@ This template/project is meant to run in a devcontainer.
 1. In `.devcontainer` add a file named `secrets.env`
 2. Add these lines
 
-* PULUMI_ACCESS_TOKEN={'YOUR_PULUMI_TOKEN_HERE'}
-* AZURE_SUBSCRIPTION_ID={'YOUR_SELECTED_AZURE_SUBSCRIPTION_HERE'}
+* PULUMI_ACCESS_TOKEN=YOUR_PULUMI_TOKEN_HERE
+* AZURE_SUBSCRIPTION_ID=YOUR_SELECTED_AZURE_SUBSCRIPTION_HERE

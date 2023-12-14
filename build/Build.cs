@@ -26,10 +26,6 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public Build()
-    {
-        PULUMI_ACCESS_TOKEN = System.Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN") ?? throw new ArgumentNullException();
-    }
     public static int Main() => Execute<Build>(x => x.Compile);
 
     #region Configurations
@@ -54,8 +50,8 @@ class Build : NukeBuild
     [Parameter("Environment to build - Default is 'dev'")]
     readonly string Environment = "dev";
 
-    [Parameter("Pulumi Access Toke")]
-    readonly string PULUMI_ACCESS_TOKEN = "GET FROM ENVIRONMENT VARIABLE OR GO HOME";
+    [Parameter("PULUMI_ACCESS_TOKEN")]
+    readonly string PulumiAccessToken = "GET FROM ENVIRONMENT VARIABLE OR GO HOME";
 
     #region Static names
     readonly string organization = "sukkergris"; // "sukkergris"
@@ -82,7 +78,7 @@ class Build : NukeBuild
             .SetCwd(IaC_Root_Dir / jobApplication)
             .SetStack(jobApplicationStack)
             .EnableSkipPreview()
-            .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PULUMI_ACCESS_TOKEN));
+            .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
     }
     #endregion
     #region Clean
