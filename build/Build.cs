@@ -30,7 +30,7 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.LoginToAzure);
+    public static int Main() => Execute<Build>(x => x.Clean);
 
     #region Configurations
     // Azure Function Config
@@ -156,7 +156,8 @@ class Build : NukeBuild
         ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientID} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
         var azCredential = new DefaultAzureCredential();
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
-        var azAccessToken = azCredential.GetToken(tokenRequestContext);        Log.Debug("azAccessToken", azAccessToken.Token);
+        var azAccessToken = azCredential.GetToken(tokenRequestContext);
+        Log.Debug("azAccessToken", azAccessToken.Token);
     });
     #endregion
 }
