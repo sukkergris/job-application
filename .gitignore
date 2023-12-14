@@ -407,4 +407,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Nuke
-.nuke/
+.nuke/temp

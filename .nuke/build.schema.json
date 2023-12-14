@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$ref": "#/definitions/build",
+  "title": "Build Schema",
+  "definitions": {
+    "build": {
+      "type": "object",
+      "properties": {
+        "AzureClientID": {
+          "type": "string",
+          "description": "AZURE_CLIENT_ID"
+        },
+        "AzureClientSecret": {
+          "type": "string",
+          "description": "AZURE_CLIENT_SECRET"
+        },
+        "AzureTenantId": {
+          "type": "string",
+          "description": "AZURE_TENANT_ID"
+        },
+        "Configuration": {
+          "type": "string",
+          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
+          "enum": [
+            "Debug",
+            "Release"
+          ]
+        },
+        "Continue": {
+          "type": "boolean",
+          "description": "Indicates to continue a previously failed build attempt"
+        },
+        "Environment": {
+          "type": "string",
+          "description": "Environment to build - Default is 'dev'"
+        },
+        "Help": {
+          "type": "boolean",
+          "description": "Shows the help text for this build assembly"
+        },
+        "Host": {
+          "type": "string",
+          "description": "Host for execution. Default is 'automatic'",
+          "enum": [
+            "AppVeyor",
+            "AzurePipelines",
+            "Bamboo",
+            "Bitbucket",
+            "Bitrise",
+            "GitHubActions",
+            "GitLab",
+            "Jenkins",
+            "Rider",
+            "SpaceAutomation",
+            "TeamCity",
+            "Terminal",
+            "TravisCI",
+            "VisualStudio",
+            "VSCode"
+          ]
+        },
+        "NoLogo": {
+          "type": "boolean",
+          "description": "Disables displaying the NUKE logo"
+        },
+        "Partition": {
+          "type": "string",
+          "description": "Partition to use on CI"
+        },
+        "Plan": {
+          "type": "boolean",
+          "description": "Shows the execution plan (HTML)"
+        },
+        "Profile": {
+          "type": "array",
+          "description": "Defines the profiles to load",
+          "items": {
+            "type": "string"
+          }
+        },
+        "PulumiAccessToken": {
+          "type": "string",
+          "description": "PULUMI_ACCESS_TOKEN"
+        },
+        "PulumiOrganization": {
+          "type": "string",
+          "description": "PULUMI_ORGANIZATION"
+        },
+        "Root": {
+          "type": "string",
+          "description": "Root directory during build execution"
+        },
+        "Skip": {
+          "type": "array",
+          "description": "List of targets to be skipped. Empty list skips all dependencies",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AndCompile",
+              "AndDeploy",
+              "AndRestore",
+              "AndZip",
+              "Clean",
+              "Compile",
+              "Deploy",
+              "IaC",
+              "LoginToAzure",
+              "Restore",
+              "Zip"
+            ]
+          }
+        },
+        "stack": {
+          "type": "string",
+          "description": "PULUMI_STACKNAME"
+        },
+        "Target": {
+          "type": "array",
+          "description": "List of targets to be invoked. Default is '{default_target}'",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AndCompile",
+              "AndDeploy",
+              "AndRestore",
+              "AndZip",
+              "Clean",
+              "Compile",
+              "Deploy",
+              "IaC",
+              "LoginToAzure",
+              "Restore",
+              "Zip"
+            ]
+          }
+        },
+        "Verbosity": {
+          "type": "string",
+          "description": "Logging verbosity during build execution. Default is 'Normal'",
+          "enum": [
+            "Minimal",
+            "Normal",
+            "Quiet",
+            "Verbose"
+          ]
+        }
+      }
+    }
+  }
+}
