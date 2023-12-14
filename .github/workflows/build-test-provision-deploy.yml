@@ -17,11 +17,9 @@
 name: build-test-provision-deploy
 
 on:
-  workflow_dispatch:
-    inputs:
-      :
-        description: ""
-        required: false
+  push:
+    branches:
+      - main
 
 jobs:
   ubuntu-latest:
@@ -38,5 +36,3 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Run: '
         run: ./build.cmd 
-        env:
-          : ${{ github.event.inputs. }}

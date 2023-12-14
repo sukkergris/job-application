@@ -22,7 +22,7 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.AzureSignTool;
 using Azure.Core;
 
-[GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnWorkflowDispatchOptionalInputs = new string[] { "" })]// OnPushBranches = new[] { "main" })]
+[GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnPushBranches = new[] { "main" })]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -57,13 +57,13 @@ class Build : NukeBuild
     readonly string PulumiAccessToken;
 
     #region Static names - magic strings
-    
+
     [Parameter("PULUMI_ORGANIZATION")]
     readonly string PulumiOrganization;
 
     [Parameter("PULUMI_STACKNAME")]
     readonly string stack; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
-    
+
     readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
     string stackName => $"{PulumiOrganization}/{stack}/{stackEnvironment}";
     #endregion
