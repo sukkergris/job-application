@@ -30,7 +30,7 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.Clean);
+    public static int Main() => Execute<Build>(x => x.AndDeploy);
 
     #region Build Configurations
     readonly string dotnetVersion = "net6.0";
@@ -128,7 +128,7 @@ class Build : NukeBuild
         .Executes(GoZip);
     void GoZip()
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(ZipDir)); 
+        Directory.CreateDirectory(Path.GetDirectoryName(ZipDir));
         System.IO.Compression.ZipFile.CreateFromDirectory(PublishDir, ZipDir);
     }
     #endregion
