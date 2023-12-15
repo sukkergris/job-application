@@ -82,10 +82,11 @@ class Build : NukeBuild
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
         Log.Debug(PulumiOrganization);
         var envVar = Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN");
+        System.Console.WriteLine($"PULUMI_ACCESS_TOKEN: {envVar}");
         Log.Debug("PULUMI_ACCESS_TOKEN");
-        Log.Warning(envVar);
+        Log.Debug(envVar);
         Log.Debug("stackName");
-        Log.Warning( stackName);
+        Log.Debug( stackName);
         PulumiTasks.PulumiStackSelect(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStackName(stackName)
