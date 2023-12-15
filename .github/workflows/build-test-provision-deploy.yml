@@ -42,6 +42,7 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
+        secrets: inherit
       - name: 'Run: '
         run: ./build.cmd
         env:
