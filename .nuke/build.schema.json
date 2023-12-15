@@ -6,7 +6,7 @@
     "build": {
       "type": "object",
       "properties": {
-        "AzureClientID": {
+        "AzureClientId": {
           "type": "string",
           "description": "AZURE_CLIENT_ID"
         },
