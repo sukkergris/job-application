@@ -22,7 +22,8 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.AzureSignTool;
 using Azure.Core;
 
-[GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnPushBranches = new[] { "main" })]
+[GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnPushBranches = new[] { "main" },
+    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId)})]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -72,6 +73,7 @@ class Build : NukeBuild
     #endregion
     #region Infrastructure
     [Parameter("PULUMI_ACCESS_TOKEN")]
+    [Secret]
     readonly string PulumiAccessToken;
     Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
@@ -145,13 +147,15 @@ class Build : NukeBuild
     [Parameter("AZURE_CLIENT_ID")]
     readonly string AzureClientId;
     [Parameter("AZURE_CLIENT_SECRET")]
+    [Secret]
     readonly string AzureClientSecret;
     [Parameter("AZURE_TENANT_ID")]
+    [Secret]
     readonly string AzureTenantId;
     Target LoginToAzure => _ => _.DependentFor(IaC)
-                                    //.Requires(() => AzureClientId)
-                                    //.Requires(() => AzureClientSecret)
-                                    //.Requires(() => AzureTenantId)
+                                    .Requires(() => AzureClientId)
+                                    .Requires(() => AzureClientSecret)
+                                    .Requires(() => AzureTenantId)
     .Executes(() =>
     {
         ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
