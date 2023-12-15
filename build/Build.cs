@@ -79,6 +79,7 @@ class Build : NukeBuild
     Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
+        Log.Debug(Environment.GetEnvironmentVariable("TEST"));
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
         Log.Debug(PulumiOrganization);
         var envVar = Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN");
