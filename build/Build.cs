@@ -32,7 +32,7 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.AndDeploy);
+    public static int Main() => Execute<Build>(x => x.Bar);
 
     #region Build Configurations
     readonly string dotnetVersion = "net6.0";
