@@ -177,6 +177,6 @@ class Build : NukeBuild
         .Requires(() => Foo)
         .Executes(() =>
         {
-            Log.Information(Foo);
+            Log.Information($"{Foo.Length}");
         });
 }
