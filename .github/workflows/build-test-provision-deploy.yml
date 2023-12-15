@@ -53,3 +53,7 @@ jobs:
           PulumiOrganization: ${{ secrets.PULUMI_ORGANIZATION }}
           PULUMI_ORGANIZATION: ${{ secrets.PULUMI_ORGANIZATION }}
           TEST: "Hello world!"
+        - name: Debug Environment Variables
+          run: |
+            echo "PulumiAccessToken: $PulumiAccessToken"
+            echo "AzureClientSecret: $AzureClientSecret"
