@@ -84,6 +84,7 @@ class Build : NukeBuild
     {
         Log.Information("PulumiStackName is null or empty {value}", string.IsNullOrWhiteSpace(PulumiStackName));
         Log.Information("PulumiOrganization is null or empty {value}", string.IsNullOrWhiteSpace(PulumiOrganization));
+        Log.Information("PO.length {value}", PulumiOrganization.Length);
         Log.Information("PAT: {value}", PulumiAccessToken.Length);
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
 
@@ -95,7 +96,8 @@ class Build : NukeBuild
         PulumiTasks.PulumiUp(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStack(stackName)
-            .EnableSkipPreview());
+            .EnableSkipPreview()
+            .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PulumiAccessToken));
     }
     #endregion
     #region Clean
