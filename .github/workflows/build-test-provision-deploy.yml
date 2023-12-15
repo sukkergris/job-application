@@ -31,7 +31,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - run: |
-          echo $FOO
+          echo ${{ vars.FOO }}
           az webapp list --query "[?state=='Running']"
         env:
           ACTIONS_RUNNER_DEBUG: true
