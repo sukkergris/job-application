@@ -23,7 +23,7 @@ using Nuke.Common.Tools.AzureSignTool;
 using Azure.Core;
 
 [GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnPushBranches = new[] { "main" },
-    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId)})]
+    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId)})]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -145,6 +145,7 @@ class Build : NukeBuild
     #endregion
     #region AzureTasks
     [Parameter("AZURE_CLIENT_ID")]
+    [Secret]
     readonly string AzureClientId;
     [Parameter("AZURE_CLIENT_SECRET")]
     [Secret]

@@ -8,15 +8,18 @@
       "properties": {
         "AzureClientId": {
           "type": "string",
-          "description": "AZURE_CLIENT_ID"
+          "description": "AZURE_CLIENT_ID",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "AzureClientSecret": {
           "type": "string",
-          "description": "AZURE_CLIENT_SECRET"
+          "description": "AZURE_CLIENT_SECRET",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "AzureTenantId": {
           "type": "string",
-          "description": "AZURE_TENANT_ID"
+          "description": "AZURE_TENANT_ID",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "Configuration": {
           "type": "string",
@@ -76,7 +79,8 @@
         },
         "PulumiAccessToken": {
           "type": "string",
-          "description": "PULUMI_ACCESS_TOKEN"
+          "description": "PULUMI_ACCESS_TOKEN",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "PulumiOrganization": {
           "type": "string",
