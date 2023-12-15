@@ -41,3 +41,5 @@ jobs:
           AzureClientSecret: ${{ secrets.AZURE_CLIENT_SECRET }}
           AzureTenantId: ${{ secrets.AZURE_TENANT_ID }}
           AzureClientId: ${{ secrets.AZURE_CLIENT_ID }}
+          PulumiStackName: ${{ secrets.PULUMI_STACK_NAME }}
+          PulumiOrganization: ${{ secrets.PULUMI_ORGANIZATION }}
