@@ -34,8 +34,9 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
-      - name: 'Run: '
-        run: ./build.cmd
+      - name: 'Run: ' |
+          echo ${{ env.FOO }}
+          run: ./build.cmd
         env:
           PulumiAccessToken: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           AzureClientSecret: ${{ secrets.AZURE_CLIENT_SECRET }}
