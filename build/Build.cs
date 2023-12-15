@@ -143,14 +143,14 @@ class Build : NukeBuild
     #endregion
     #region AzureTasks
     [Parameter("AZURE_CLIENT_ID")]
-    readonly string AzureClientID;
+    readonly string AzureClientId;
     [Parameter("AZURE_CLIENT_SECRET")]
     readonly string AzureClientSecret;
     [Parameter("AZURE_TENANT_ID")]
     readonly string AzureTenantId;
-    Target LoginToAzure => _ => _.DependentFor(IaC).Requires(() => AzureClientID).Requires(() => AzureClientSecret).Requires(() => AzureTenantId).Executes(() =>
+    Target LoginToAzure => _ => _.DependentFor(IaC).Requires(() => AzureClientId).Requires(() => AzureClientSecret).Requires(() => AzureTenantId).Executes(() =>
     {
-        ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientID} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
+        ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
         var azCredential = new DefaultAzureCredential();
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
         var azAccessToken = azCredential.GetToken(tokenRequestContext);
