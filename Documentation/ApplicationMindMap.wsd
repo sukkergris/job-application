@@ -19,11 +19,12 @@
 *** Roslynpad
 *** Postman
 *** Fiddler
+*** [[https://github.com/nektos/act act - github workflows locally]]
 
 ** Platforms
 *** Azure
 *** Pulumi
-*** Github
+*** GitHub
 *** Trello
 *** Microsoft Teams
 

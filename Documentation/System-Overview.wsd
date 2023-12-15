@@ -5,6 +5,7 @@
 *** .NET c#
 *** Docker
 *** [[https://code.visualstudio.com/docs/devcontainers/containers devcontainers]]
+*** [[https://github.com/nektos/act act - github workflows locally]]
 ** Services
 *** IaC
 **** [[https://www.pulumi.com/ Pulumi]]

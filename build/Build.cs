@@ -32,30 +32,27 @@ class Build : NukeBuild
     ///   - Microsoft VSCode           https://nuke.build/vscode
     public static int Main() => Execute<Build>(x => x.Clean);
 
-    #region Configurations
-    // Azure Function Config
-
-    #endregion
+    #region Build Configurations
     readonly string dotnetVersion = "net6.0";
     readonly string dotnetRuntime = "linux-x64";
     readonly string heiselberg_mails = "Heiselberg.Mails";
-    #region Paths
+    readonly string heiselberg_mails_csproj = "Heiselberg.Mails.csproj";
+    #endregion
 
+    #region Paths
     AbsolutePath IaC_Root_Dir => RootDirectory / "IaC";
     AbsolutePath SourceCodeDir => RootDirectory / "src";
     AbsolutePath PublishDir => SourceCodeDir / $"{heiselberg_mails}/bin/{Configuration}/{dotnetRuntime}/Publish";
     AbsolutePath ArtifactsDir => RootDirectory / "artifacts";
     AbsolutePath ZipDir => ArtifactsDir / $"app.zip";
     #endregion
+    #region Environment Configurations
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Parameter("Environment to build - Default is 'dev'")]
     readonly string Environment = "dev";
-
-    [Parameter("PULUMI_ACCESS_TOKEN")]
-    readonly string PulumiAccessToken;
-
+    #endregion
     #region Static names - magic strings
 
     [Parameter("PULUMI_ORGANIZATION")]
@@ -67,16 +64,16 @@ class Build : NukeBuild
     readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
     string stackName => $"{PulumiOrganization}/{stack}/{stackEnvironment}";
     #endregion
-
     #region Chained Targets
     Target Clean => _ => _.Executes(GoClean);
     Target AndRestore => _ => _.DependsOn(Clean).Executes(GoRestore);
     Target AndCompile => _ => _.DependsOn(AndRestore).Executes(GoCompile);
     Target AndZip => _ => _.DependsOn(AndCompile).Executes(GoZip);
-    Target AndDeploy => _ => _.DependsOn(AndZip).Executes(GoDeploy);
+    Target AndDeploy => _ => _.DependsOn(AndZip).DependsOn(IaC).Executes(GoDeploy);
     #endregion
-
     #region Infrastructure
+    [Parameter("PULUMI_ACCESS_TOKEN")]
+    readonly string PulumiAccessToken;
     Target IaC => _ => _.Requires(() => PulumiAccessToken).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
@@ -106,7 +103,7 @@ class Build : NukeBuild
     private void GoRestore()
     {
         DotNetTasks.DotNetRestore(settings => settings
-            .SetProjectFile(SourceCodeDir / $"{heiselberg_mails}/Heiselberg.Mails.csproj")
+            .SetProjectFile(SourceCodeDir / $"{heiselberg_mails}/{heiselberg_mails_csproj}")
             .SetRuntime("linux-x64"));
     }
     #endregion
@@ -131,7 +128,7 @@ class Build : NukeBuild
         .Executes(GoZip);
     void GoZip()
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(ZipDir));
+        Directory.CreateDirectory(Path.GetDirectoryName(ZipDir)); 
         System.IO.Compression.ZipFile.CreateFromDirectory(PublishDir, ZipDir);
     }
     #endregion
