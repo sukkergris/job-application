@@ -51,3 +51,4 @@ jobs:
           AzureClientId: ${{ secrets.AZURE_CLIENT_ID }}
           PulumiStackName: ${{ secrets.PULUMI_STACK_NAME }}
           PulumiOrganization: ${{ secrets.PULUMI_ORGANIZATION }}
+          PULUMI_ORGANIZATION: ${{ secrets.PULUMI_ORGANIZATION }}
