@@ -38,7 +38,6 @@ class Build : NukeBuild
     readonly string heiselberg_mails = "Heiselberg.Mails";
     readonly string heiselberg_mails_csproj = "Heiselberg.Mails.csproj";
     #endregion
-
     #region Paths
     AbsolutePath IaC_Root_Dir => RootDirectory / "IaC";
     AbsolutePath SourceCodeDir => RootDirectory / "src";
@@ -59,10 +58,10 @@ class Build : NukeBuild
     readonly string PulumiOrganization;
 
     [Parameter("PULUMI_STACKNAME")]
-    readonly string stack; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
+    readonly string PulumiStackName; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
 
     readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
-    string stackName => $"{PulumiOrganization}/{stack}/{stackEnvironment}";
+    string stackName => $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
     #endregion
     #region Chained Targets
     Target Clean => _ => _.Executes(GoClean);
@@ -74,13 +73,14 @@ class Build : NukeBuild
     #region Infrastructure
     [Parameter("PULUMI_ACCESS_TOKEN")]
     readonly string PulumiAccessToken;
-    Target IaC => _ => _.Requires(() => PulumiAccessToken).Executes(GoProvisionInfrastructure);
+    Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
-        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / stack).SetStackName(stackName));
+        Log.Debug("Stack", stackName);
+        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / PulumiStackName).SetStackName(stackName));
 
         PulumiTasks.PulumiUp(_ => _
-            .SetCwd(IaC_Root_Dir / stack)
+            .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStack(stackName)
             .EnableSkipPreview()
             .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
@@ -148,7 +148,7 @@ class Build : NukeBuild
     readonly string AzureClientSecret;
     [Parameter("AZURE_TENANT_ID")]
     readonly string AzureTenantId;
-    Target LoginToAzure => _ => _.Requires(() => AzureClientID).Requires(() => AzureClientSecret).Requires(() => AzureTenantId).Executes(() =>
+    Target LoginToAzure => _ => _.DependentFor(IaC).Requires(() => AzureClientID).Requires(() => AzureClientSecret).Requires(() => AzureTenantId).Executes(() =>
     {
         ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientID} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
         var azCredential = new DefaultAzureCredential();
