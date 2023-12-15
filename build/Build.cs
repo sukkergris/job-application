@@ -63,7 +63,7 @@ class Build : NukeBuild
     readonly string PulumiStackName; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
 
     readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
-    string stackName => $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
+    //WARNING!: string stackName => $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}"; // NOT WORKING IN GITHUB ACTIONS
     #endregion
     #region Chained Targets
     Target Clean => _ => _.Executes(GoClean);
@@ -79,6 +79,7 @@ class Build : NukeBuild
     Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
+        string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
         var envVar = Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN");
         Log.Warning(envVar);
         Log.Warning( stackName);

@@ -7,8 +7,6 @@ using System.Collections.Generic;
 
 return await Deployment.RunAsync(() =>
 {
-    var secret = System.Environment.GetEnvironmentVariable("SECRET");
-
     var azureConfig = new Config("azure"); // Pulumi.{stack}.yaml
     var azLocation = azureConfig.Require("location");
     var resourceType = "rg";
