@@ -34,6 +34,7 @@ jobs:
           az webapp list --query "[?state=='Running']"
         env:
           ACTIONS_RUNNER_DEBUG: true
+          FooFoo: ${{ secrets.FOO }}
       - uses: actions/checkout@v3
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v3
