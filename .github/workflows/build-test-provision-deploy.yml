@@ -21,9 +21,6 @@ on:
     branches:
       - main
 
-permissions:
-      id-token: write
-      contents: read
 jobs:
   ubuntu-latest:
     name: ubuntu-latest
@@ -55,3 +52,4 @@ jobs:
           PulumiStackName: ${{ secrets.PULUMI_STACK_NAME }}
           PulumiOrganization: ${{ secrets.PULUMI_ORGANIZATION }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          Foo: ${{ secrets.FOO }}

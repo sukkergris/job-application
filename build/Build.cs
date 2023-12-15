@@ -24,7 +24,7 @@ using Azure.Core;
 using Pulumi.AzureNative.NetApp.V20210401.Inputs;
 
 [GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnPushBranches = new[] { "main" },
-    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization),"PULUMI_ACCESS_TOKEN"})]
+    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization),"PULUMI_ACCESS_TOKEN", nameof(Foo)})]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -171,4 +171,12 @@ class Build : NukeBuild
         Log.Debug(azAccessToken.Token);
     });
     #endregion
+    [Parameter][Secret] readonly string Foo;
+
+    Target Bar => _ => _
+        .Requires(() => Foo)
+        .Executes(() =>
+        {
+            Log.Information(Foo);
+        });
 }
