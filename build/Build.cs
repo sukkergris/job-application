@@ -79,13 +79,14 @@ class Build : NukeBuild
     private void GoProvisionInfrastructure()
     {
         Log.Debug( stackName);
-        PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / PulumiStackName).SetStackName(stackName));
+        PulumiTasks.PulumiStackSelect(_ => _
+            .SetCwd(IaC_Root_Dir / PulumiStackName)
+            .SetStackName(stackName));
 
         PulumiTasks.PulumiUp(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStack(stackName)
-            .EnableSkipPreview()
-            .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
+            .EnableSkipPreview());
     }
     #endregion
     #region Clean
