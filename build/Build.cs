@@ -26,7 +26,7 @@ using Pulumi.AzureNative.NetApp.V20210401.Inputs;
 [GitHubActions("build-test-provision-deploy",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
-    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization),"PULUMI_ACCESS_TOKEN", nameof(Foo)}),
+    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization)}),
     ]
 class Build : NukeBuild
 {
@@ -97,7 +97,7 @@ class Build : NukeBuild
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStack(stackName)
             .EnableSkipPreview()
-            .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PulumiAccessToken));
+            .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
     }
     #endregion
     #region Clean
