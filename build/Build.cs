@@ -79,21 +79,13 @@ class Build : NukeBuild
     Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
-        Log.Information("PO length = {value}", PulumiOrganization.Length);
-        Log.Debug(Environment.GetEnvironmentVariable("TEST"));
+        Log.Information("PulumiStackName is null or empty {value}", string.IsNullOrWhiteSpace(PulumiStackName));
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
-        Log.Information("stackName.length = {value}",stackName.Length);
-        Log.Debug(PulumiOrganization);
-        var envVar = Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN");
-        System.Console.WriteLine($"PULUMI_ACCESS_TOKEN: {envVar}");
-        Log.Debug("PULUMI_ACCESS_TOKEN");
-        Log.Debug(envVar);
-        Log.Debug("stackName");
-        Log.Debug( stackName);
-        PulumiTasks.PulumiStackSelect(_ => _
-            .SetCwd(IaC_Root_Dir / PulumiStackName)
-            .SetStackName(stackName)
-            .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PulumiAccessToken));
+
+        //PulumiTasks.PulumiStackSelect(_ => _
+        //    .SetCwd(IaC_Root_Dir / PulumiStackName)
+        //    .SetStackName(stackEnvironment)
+        //    .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PulumiAccessToken));
 
         PulumiTasks.PulumiUp(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)

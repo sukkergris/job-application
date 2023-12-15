@@ -34,6 +34,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - run: |
           az webapp list --query "[?state=='Running']"
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - uses: actions/checkout@v3
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v3
@@ -44,8 +46,6 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Run: '
         run: |
-          echo "PulumiAccessToken: $PulumiAccessToken"
-          echo "AzureClientSecret: $AzureClientSecret"
           ./build.cmd
         env:
           PulumiAccessToken: ${{ secrets.PULUMI_ACCESS_TOKEN }}
@@ -54,7 +54,5 @@ jobs:
           AzureClientId: ${{ secrets.AZURE_CLIENT_ID }}
           PulumiStackName: ${{ secrets.PULUMI_STACK_NAME }}
           PulumiOrganization: ${{ secrets.PULUMI_ORGANIZATION }}
-          PULUMI_ORGANIZATION: ${{ secrets.PULUMI_ORGANIZATION }}
-          TEST: "Hello world!"
 
 
