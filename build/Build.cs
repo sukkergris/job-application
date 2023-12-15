@@ -171,7 +171,7 @@ class Build : NukeBuild
         Log.Debug(azAccessToken.Token);
     });
     #endregion
-    [Parameter][Secret] readonly string Foo;
+    [Parameter] readonly string Foo;
 
     Target Bar => _ => _
         .Requires(() => Foo)
