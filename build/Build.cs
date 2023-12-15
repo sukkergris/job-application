@@ -81,6 +81,7 @@ class Build : NukeBuild
     {
         Log.Debug(Environment.GetEnvironmentVariable("TEST"));
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
+        Log.Information("stackName = {value}",stackName);
         Log.Debug(PulumiOrganization);
         var envVar = Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN");
         System.Console.WriteLine($"PULUMI_ACCESS_TOKEN: {envVar}");
