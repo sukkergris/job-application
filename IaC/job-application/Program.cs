@@ -53,7 +53,7 @@ return await Deployment.RunAsync(() =>
         ServicePlanId = appServicePlan.Id,
         SiteConfig = new LinuxFunctionAppSiteConfigArgs
         {
-            
+
         }
     });
 

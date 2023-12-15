@@ -49,8 +49,8 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Parameter("Environment to build - Default is 'dev'")]
-    readonly string Environment = "dev";
+    //[Parameter("Environment to build - Default is 'dev'")]
+    //readonly string Environment = "dev";
     #endregion
     #region Static names - magic strings
 

@@ -16,7 +16,7 @@
     <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <PackageReference Include="Azure.ResourceManager" Version="1.9.0" />
     <PackageReference Include="Nuke.Common" Version="7.0.6" />
-    <PackageReference Include="Pulumi.AzureNative" Version="2.20.1" />
+    <PackageReference Include="Pulumi.AzureNative" Version="2.21.2" />
   </ItemGroup>
 
 </Project>
