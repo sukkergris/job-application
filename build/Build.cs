@@ -78,7 +78,7 @@ class Build : NukeBuild
     Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
-        Log.Debug("Stack", stackName);
+        Log.Debug( stackName);
         PulumiTasks.PulumiStackSelect(_ => _.SetCwd(IaC_Root_Dir / PulumiStackName).SetStackName(stackName));
 
         PulumiTasks.PulumiUp(_ => _
@@ -159,11 +159,11 @@ class Build : NukeBuild
                                     .Requires(() => AzureTenantId)
     .Executes(() =>
     {
-        ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
+       // ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
         var azCredential = new DefaultAzureCredential();
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
         var azAccessToken = azCredential.GetToken(tokenRequestContext);
-        Log.Debug("azAccessToken", azAccessToken.Token);
+        Log.Debug(azAccessToken.Token);
     });
     #endregion
 }
