@@ -23,8 +23,11 @@ using Nuke.Common.Tools.AzureSignTool;
 using Azure.Core;
 using Pulumi.AzureNative.NetApp.V20210401.Inputs;
 
-[GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnPushBranches = new[] { "main" },
-    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization),"PULUMI_ACCESS_TOKEN", nameof(Foo)})]
+[GitHubActions("build-test-provision-deploy",
+    GitHubActionsImage.UbuntuLatest,
+    OnPushBranches = new[] { "main" },
+    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization),"PULUMI_ACCESS_TOKEN", nameof(Foo)}),
+    ]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -32,7 +35,7 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.Bar);
+    public static int Main() => Execute<Build>(x => x.AndDeploy);
 
     #region Build Configurations
     readonly string dotnetVersion = "net6.0";
