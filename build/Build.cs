@@ -62,7 +62,7 @@ class Build : NukeBuild
     [Parameter("PULUMI_ORGANIZATION")]
     readonly string PulumiOrganization;
 
-    [Parameter("PULUMI_STACKNAME")]
+    [Parameter("PULUMI_STACK_NAME")]
     readonly string PulumiStackName; // Found in ~/IaC/job-application/Pulumi.yaml #todo: Auto resolve from Pulumi.yaml
 
     readonly string stackEnvironment = "dev"; // #todo: Resolve depending on the environment
@@ -83,6 +83,8 @@ class Build : NukeBuild
     private void GoProvisionInfrastructure()
     {
         Log.Information("PulumiStackName is null or empty {value}", string.IsNullOrWhiteSpace(PulumiStackName));
+        Log.Information("PulumiOrganization is null or empty {value}", string.IsNullOrWhiteSpace(PulumiOrganization));
+        Log.Information("PAT: {value}", PulumiAccessToken.Length);
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
 
         //PulumiTasks.PulumiStackSelect(_ => _
