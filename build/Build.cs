@@ -21,6 +21,7 @@ using Azure.Identity;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.AzureSignTool;
 using Azure.Core;
+using Pulumi.AzureNative.NetApp.V20210401.Inputs;
 
 [GitHubActions("build-test-provision-deploy", GitHubActionsImage.UbuntuLatest, OnPushBranches = new[] { "main" },
     ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization)})]
@@ -78,7 +79,9 @@ class Build : NukeBuild
     Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
-        Log.Debug( stackName);
+        var envVar = Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN");
+        Log.Warning(envVar);
+        Log.Warning( stackName);
         PulumiTasks.PulumiStackSelect(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStackName(stackName));
