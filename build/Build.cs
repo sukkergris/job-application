@@ -80,12 +80,16 @@ class Build : NukeBuild
     private void GoProvisionInfrastructure()
     {
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
+        Log.Debug(PulumiOrganization);
         var envVar = Environment.GetEnvironmentVariable("PULUMI_ACCESS_TOKEN");
+        Log.Debug("PULUMI_ACCESS_TOKEN");
         Log.Warning(envVar);
+        Log.Debug("stackName");
         Log.Warning( stackName);
         PulumiTasks.PulumiStackSelect(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)
-            .SetStackName(stackName));
+            .SetStackName(stackName)
+            .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PulumiAccessToken));
 
         PulumiTasks.PulumiUp(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)
