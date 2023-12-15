@@ -34,8 +34,7 @@
           "description": "Indicates to continue a previously failed build attempt"
         },
         "Foo": {
-          "type": "string",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+          "type": "string"
         },
         "Help": {
           "type": "boolean",
