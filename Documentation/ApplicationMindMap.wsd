@@ -19,7 +19,9 @@
 *** Roslynpad
 *** Postman
 *** Fiddler
-*** [[https://github.com/nektos/act act - github workflows locally]]
+*** GitHub
+****_ [[https://github.com/cli/cli?tab=readme-ov-file GitHub CLI]]
+****_ [[https://github.com/nektos/act act - github workflows locally]]
 
 ** Platforms
 *** Azure

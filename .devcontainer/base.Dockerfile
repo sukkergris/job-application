@@ -19,6 +19,16 @@ RUN apt-get update -y && \
         # Other tools as needed \
     && rm -rf /var/lib/apt/lists/*
 
+# Install gh
+RUN curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+  -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+
+RUN chmod 644 /usr/share/keyrings/githubcli-archive-keyring.gpg
+
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+RUN apt-get update && apt-get install gh -y
+
 # Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
@@ -26,7 +36,7 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 ARG PULUMI_VERSION
 RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version $PULUMI_VERSION && \
     mv ~/.pulumi/bin/* /usr/bin
-    
+
 ENV PATH="$PATH:/root/.pulumi/bin"
 
 # Install .NET SDK 6.0
@@ -41,7 +51,7 @@ RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-8.0 
+    apt-get install -y dotnet-sdk-8.0
 
 # Install Nuke Global Tool
 RUN dotnet tool install --global Nuke.GlobalTool

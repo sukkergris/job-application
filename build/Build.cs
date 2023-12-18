@@ -22,11 +22,13 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.AzureSignTool;
 using Azure.Core;
 using Pulumi.AzureNative.NetApp.V20210401.Inputs;
+using _build;
+using System.Threading.Tasks;
 
 [GitHubActions("build-test-provision-deploy",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
-    ImportSecrets = new[] {nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId),nameof(AzureClientId), nameof(PulumiStackName),nameof(PulumiOrganization)}),
+    ImportSecrets = new[] { nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId), nameof(AzureClientId), nameof(PulumiStackName), nameof(PulumiOrganization) })
     ]
 class Build : NukeBuild
 {
@@ -79,7 +81,7 @@ class Build : NukeBuild
     [Parameter("PULUMI_ACCESS_TOKEN")]
     [Secret]
     readonly string PulumiAccessToken;
-    Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(()=>PulumiStackName).Requires(()=>PulumiOrganization).Executes(GoProvisionInfrastructure);
+    Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(() => PulumiStackName).Requires(() => PulumiOrganization).Executes(GoProvisionInfrastructure);
     private void GoProvisionInfrastructure()
     {
         Log.Information("PulumiStackName is null or empty {value}", string.IsNullOrWhiteSpace(PulumiStackName));
@@ -150,9 +152,9 @@ class Build : NukeBuild
 
     Target Deploy => _ => _
         .Executes(GoDeploy);
-    private void GoDeploy()
+    private async Task GoDeploy()
     {
-
+        await ZipDeploy.ThisArtifact(new Uri("uri to artifacts")).ToAzureFunction();
     }
     #endregion
     #region AzureTasks
@@ -171,19 +173,11 @@ class Build : NukeBuild
                                     .Requires(() => AzureTenantId)
     .Executes(() =>
     {
-       // ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
+        // ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
         var azCredential = new DefaultAzureCredential();
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
         var azAccessToken = azCredential.GetToken(tokenRequestContext);
         Log.Debug(azAccessToken.Token);
     });
     #endregion
-    [Parameter] readonly string Foo;
-
-    Target Bar => _ => _
-        .Requires(() => Foo)
-        .Executes(() =>
-        {
-            Log.Information($"{Foo.Length}");
-        });
 }
