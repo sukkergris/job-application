@@ -1,4 +1,16 @@
-﻿using System;using System.Threading.Tasks;using Azure.Core;using Azure.Identity;namespace _build;public static class ZipDeploy{    public static MyAzureFunction ThisArtifact(Uri artifact)    {        return new MyAzureFunction(artifact);    }
+﻿using System;
+using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Identity;
+
+namespace _build;
+
+public static class ZipDeploy
+{
+    public static MyAzureFunction ThisArtifact(Uri artifact)
+    {
+        return new MyAzureFunction(artifact);
+    }
 }
 public class MyAzureFunction
 {
@@ -15,4 +27,4 @@ public class MyAzureFunction
         var azAccessToken = await azCredential.GetTokenAsync(tokenRequestContext);
         // var managementClient = 
     }
-}
+}

@@ -154,7 +154,7 @@ class Build : NukeBuild
         .Executes(GoDeploy);
     private async Task GoDeploy()
     {
-        await ZipDeploy.ThisArtifact(new Uri("uri to artifacts")).ToAzureFunction();
+        await ZipDeploy.ThisArtifact(new Uri(ZipDir)).ToAzureFunction();
     }
     #endregion
     #region AzureTasks
