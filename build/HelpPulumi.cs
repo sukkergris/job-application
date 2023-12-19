@@ -6,21 +6,25 @@ namespace _build;
 
 public class GetVariableOutput
 {
-    readonly AbsolutePath _stack;
+    readonly AbsolutePath _stackPath;
+    readonly string _stackName;
     readonly string _pulumiAccessToken;
 
-    public static GetVariableOutput FromStack(AbsolutePath stack, string pulumiAccessToken) => new GetVariableOutput(stack, pulumiAccessToken);
+    public static GetVariableOutput FromStack(AbsolutePath stack,string stackName, string pulumiAccessToken) => new GetVariableOutput(stack,stackName, pulumiAccessToken);
 
-    private GetVariableOutput(AbsolutePath stack,string pulumiAccessToken)
+    private GetVariableOutput(AbsolutePath stackPath,string stackName,string pulumiAccessToken)
     {
-        _stack = stack;
+        _stackPath = stackPath;
+        _stackName = stackName;
         _pulumiAccessToken = pulumiAccessToken;
     }
     public string Named(string propName)
     {
+        PulumiTasks.PulumiStackSelect(_=>_.SetCwd(_stackPath).SetStackName(_stackName));
+
         return PulumiTasks.PulumiStackOutput(_ => _
             .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",_pulumiAccessToken)
-            .SetCwd(_stack)
+            .SetCwd(_stackPath)
             .SetPropertyName(propName)
             .EnableShowSecrets()
             .DisableProcessLogOutput())

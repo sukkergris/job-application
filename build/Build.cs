@@ -104,7 +104,7 @@ class Build : NukeBuild
             .EnableSkipPreview()
                );
 
-        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder, PulumiAccessToken); // # iacProjectFolder == project folder name "job-application
+        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder,stackName, PulumiAccessToken); // # iacProjectFolder == project folder name "job-application
         var resourceGroupId = variableOutputs.Named("ResourceGroupId");
         var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId");
         var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
