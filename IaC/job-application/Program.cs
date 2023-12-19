@@ -51,7 +51,7 @@ return await Deployment.RunAsync(() =>
         ServicePlanId = appServicePlan.Id,
         AuthSettings = new LinuxFunctionAppAuthSettingsArgs
         {
-            Enabled = false
+            Enabled = false // #TODO: Figure out why this is not working (removing the need of code=xyz...)
         },
         SiteConfig = new LinuxFunctionAppSiteConfigArgs
         {
@@ -59,11 +59,19 @@ return await Deployment.RunAsync(() =>
         }
     });
 
-    // Export the connection string for the storage account
+    // https://www.pulumi.com/templates/static-website/azure/
+    // https://github.com/pulumi/templates/blob/master/static-website-azure-csharp/Program.cs
+
+    var website = new Pulumi.AzureNative.Storage.StorageAccountStaticWebsite("job-application", new()
+    {
+        ResourceGroupName = resourceGroup.Name,
+        AccountName = storageAccount.Name,
+        
+    });
+
     return new Dictionary<string, object?>
     {
-        // ["connectionString"] = storageAccount.PrimaryConnectionString
-        ["ResourceGroupId"] = resourceGroup.Id, // Is getting parsed to output after a propper run
+        ["ResourceGroupId"] = resourceGroup.Id,
         ["ResourceGroupName"] = resourceGroup.Name,
         ["LinuxFunctionAppId"] = linuxFunctionApp.Id,
         ["LinuxFunctionAppName"] = linuxFunctionApp.Name
