@@ -60,7 +60,8 @@ return await Deployment.RunAsync(() =>
     {
         // ["connectionString"] = storageAccount.PrimaryConnectionString
         ["ResourceGroupId"] = resourceGroup.Id, // Is getting parsed to output after a propper run
-        //["Secret"] = secret, // Is getting parsed to output even on pre-run
-        ["LinuxFunctionApp"] = linuxFunctionApp.Id
+        ["ResourceGroupName"] = resourceGroup.Name,
+        ["LinuxFunctionAppId"] = linuxFunctionApp.Id,
+        ["LinuxFunctionAppName"] = linuxFunctionApp.Name
     };
 });

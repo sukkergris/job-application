@@ -59,7 +59,10 @@ class Build : NukeBuild
     //[Parameter("Environment to build - Default is 'dev'")]
     //readonly string Environment = "dev";
     #endregion
-    #region Static names - magic strings
+    #region Dynamic variables
+    AzureFunctionConfig AzureFunctionConfig;
+    #endregion
+    #region Project config
 
     [Parameter("PULUMI_ORGANIZATION")]
     readonly string PulumiOrganization;
@@ -75,31 +78,47 @@ class Build : NukeBuild
     Target AndRestore => _ => _.DependsOn(Clean).Executes(GoRestore);
     Target AndCompile => _ => _.DependsOn(AndRestore).Executes(GoCompile);
     Target AndZip => _ => _.DependsOn(AndCompile).Executes(GoZip);
-    Target AndDeploy => _ => _.DependsOn(AndZip).DependsOn(IaC).Executes(GoDeploy);
+    Target AndDeploy => _ => _.DependsOn(AndZip).DependsOn(IaC).OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(AzureFunctionConfig.FunctionAppName)).Executes(GoDeploy);
     #endregion
     #region Infrastructure
+    [Parameter("AZURE_SUBSCRIPTION_ID")]
+    [Secret]
+    readonly string AzureSubscriptionId;
     [Parameter("PULUMI_ACCESS_TOKEN")]
     [Secret]
     readonly string PulumiAccessToken;
-    Target IaC => _ => _.Requires(() => PulumiAccessToken).Requires(() => PulumiStackName).Requires(() => PulumiOrganization).Executes(GoProvisionInfrastructure);
-    private void GoProvisionInfrastructure()
+    Target IaC => _ => _.Requires(()=>AzureSubscriptionId).Requires(() => PulumiAccessToken).Requires(() => PulumiStackName).Requires(() => PulumiOrganization).Executes(() =>
     {
-        Log.Information("PulumiStackName is null or empty {value}", string.IsNullOrWhiteSpace(PulumiStackName));
-        Log.Information("PulumiOrganization is null or empty {value}", string.IsNullOrWhiteSpace(PulumiOrganization));
-        Log.Information("PO.length {value}", PulumiOrganization.Length);
-        Log.Information("PAT: {value}", PulumiAccessToken.Length);
-        string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
+        AzureFunctionConfig = GoProvisionInfrastructure();
+    });
+    private AzureFunctionConfig GoProvisionInfrastructure()
+    {
+        string iacProjectFolder = PulumiStackName;
 
-        //PulumiTasks.PulumiStackSelect(_ => _
-        //    .SetCwd(IaC_Root_Dir / PulumiStackName)
-        //    .SetStackName(stackEnvironment)
-        //    .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",PulumiAccessToken));
+        string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
 
         PulumiTasks.PulumiUp(_ => _
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStack(stackName)
             .EnableSkipPreview()
-            .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
+               );
+        //  .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
+        //var webAppName = PulumiTasks.PulumiStackOutput(s =>
+        //{
+        //    Log.Debug("Fetching pulumi stack output");
+        //    return s
+        //        .SetCwd(IaC_Root_Dir / PulumiStackName) // # PulumiStackName == project folder name "job-application
+        //        .SetPropertyName("ResourceGroupId")
+        //        .DisableProcessLogOutput();
+        //});
+
+        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder); // # iacProjectFolder == project folder name "job-application
+        var resourceGroupId = variableOutputs.Named("ResourceGroupId");
+        var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId");
+        var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
+        var resourceGroupName = variableOutputs.Named("ResourceGroupName");
+
+        return new AzureFunctionConfig(AzureSubscriptionId ,resourceGroupName,linuxFunctionAppName);
     }
     #endregion
     #region Clean
@@ -151,10 +170,11 @@ class Build : NukeBuild
     #region Deploy
 
     Target Deploy => _ => _
+        .OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(AzureFunctionConfig.FunctionAppName))
         .Executes(GoDeploy);
     private async Task GoDeploy()
     {
-        await ZipDeploy.ThisArtifact(new Uri(ZipDir)).ToAzureFunction();
+        await ZipDeploy.ThisArtifact(ZipDir).ToAzureFunction(AzureFunctionConfig);
     }
     #endregion
     #region AzureTasks
@@ -177,7 +197,12 @@ class Build : NukeBuild
         var azCredential = new DefaultAzureCredential();
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
         var azAccessToken = azCredential.GetToken(tokenRequestContext);
-        Log.Debug(azAccessToken.Token);
+
+        if (string.IsNullOrWhiteSpace(azAccessToken.Token)){
+            Log.Debug("Could not acquire token based on 'DefaultAzureCredential()'");
+        }
+        else
+            Log.Debug("Azure toke acquired");
     });
     #endregion
 }

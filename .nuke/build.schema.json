@@ -16,6 +16,11 @@
           "description": "AZURE_CLIENT_SECRET",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
+        "AzureSubscriptionId": {
+          "type": "string",
+          "description": "AZURE_SUBSCRIPTION_ID",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "AzureTenantId": {
           "type": "string",
           "description": "AZURE_TENANT_ID",
@@ -32,9 +37,6 @@
         "Continue": {
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
-        },
-        "Foo": {
-          "type": "string"
         },
         "Help": {
           "type": "boolean",
@@ -91,7 +93,7 @@
         },
         "PulumiStackName": {
           "type": "string",
-          "description": "PULUMI_STACKNAME"
+          "description": "PULUMI_STACK_NAME"
         },
         "Root": {
           "type": "string",
@@ -107,7 +109,6 @@
               "AndDeploy",
               "AndRestore",
               "AndZip",
-              "Bar",
               "Clean",
               "Compile",
               "Deploy",
@@ -128,7 +129,6 @@
               "AndDeploy",
               "AndRestore",
               "AndZip",
-              "Bar",
               "Clean",
               "Compile",
               "Deploy",
