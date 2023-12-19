@@ -10,5 +10,11 @@
         "Pulumi",
         "Serilog",
         "sukkergris"
-    ]
+    ],
+    "rest-client.environmentVariables": {
+        "$shared": {},
+        "local":{
+            "test":"xyz"
+        }
+    }
 }
