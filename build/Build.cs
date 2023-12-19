@@ -98,6 +98,7 @@ class Build : NukeBuild
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
 
         PulumiTasks.PulumiUp(_ => _
+            .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken)
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStack(stackName)
             .EnableSkipPreview()

@@ -17,6 +17,7 @@ public class GetVariableOutput
     public string Named(string propName)
     {
         return PulumiTasks.PulumiStackOutput(_ => _
+            //.SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",)
             .SetCwd(_stack)
             .SetPropertyName(propName)
             .EnableShowSecrets()
