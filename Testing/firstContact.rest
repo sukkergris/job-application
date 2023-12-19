@@ -1,0 +1,6 @@
+###
+@appName=heisconform-dev-976e7b5
+@azureApiUr=azurewebsites.net/api
+@funcName=FirstContact
+@code=Wf2u_5aLkEFz8xYR2orf9Ta_OJOE43YUjhuVWUOsJXmhAzFutB8o2w==
+POST https://{{appName}}.{{azureApiUr}}/{{funcName}}?code={{code}}&name=Hello
