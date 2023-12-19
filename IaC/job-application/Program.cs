@@ -49,6 +49,10 @@ return await Deployment.RunAsync(() =>
         StorageAccountName = storageAccount.Name,
         StorageAccountAccessKey = storageAccount.PrimaryAccessKey,
         ServicePlanId = appServicePlan.Id,
+        AuthSettings = new LinuxFunctionAppAuthSettingsArgs
+        {
+            Enabled = false
+        },
         SiteConfig = new LinuxFunctionAppSiteConfigArgs
         {
 

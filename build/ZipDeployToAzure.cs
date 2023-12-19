@@ -30,7 +30,7 @@ public class MyAzureFunction
     public async Task ToAzureFunction(AzureFunctionConfig config)
     {
         // https://learn.microsoft.com/en-us/azure/governance/resource-graph/first-query-rest-api
-        var azCredential = new AzureCliCredential(); // new DefaultAzureCredential(); // new AzureCliCredential();
+        var azCredential = new DefaultAzureCredential(); // new DefaultAzureCredential(); // new AzureCliCredential();
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
         var azAccessToken = await azCredential.GetTokenAsync(tokenRequestContext);
         if (string.IsNullOrEmpty(azAccessToken.Token))
