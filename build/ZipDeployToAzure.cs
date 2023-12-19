@@ -59,7 +59,7 @@ public class MyAzureFunction
 
         var uploadResp = await httpClient.PostAsync($"https://{config.FunctionAppName}.scm.azurewebsites.net/api/zipdeploy", streamContent);
 
-        Log.Debug(uploadResp.StatusCode.ToString());
+        Log.Debug($"Zip deploy upload resp status code: {uploadResp.StatusCode}");
 
         if (!uploadResp.IsSuccessStatusCode)
         {

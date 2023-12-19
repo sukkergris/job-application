@@ -17,9 +17,11 @@
 name: build-test-provision-deploy
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+#on:
+#  push:
+#    branches:
+#      - main
 
 jobs:
   ubuntu-latest:

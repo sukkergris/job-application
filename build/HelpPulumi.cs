@@ -20,6 +20,7 @@ public class GetVariableOutput
     }
     public string Named(string propName)
     {
+        // #TODO: Figure out why this hack is necessary
         PulumiTasks.PulumiStackSelect(_=>_.SetCwd(_stackPath).SetStackName(_stackName));
 
         return PulumiTasks.PulumiStackOutput(_ => _
