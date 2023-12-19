@@ -103,17 +103,8 @@ class Build : NukeBuild
             .SetStack(stackName)
             .EnableSkipPreview()
                );
-        //  .AddProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken));
-        //var webAppName = PulumiTasks.PulumiStackOutput(s =>
-        //{
-        //    Log.Debug("Fetching pulumi stack output");
-        //    return s
-        //        .SetCwd(IaC_Root_Dir / PulumiStackName) // # PulumiStackName == project folder name "job-application
-        //        .SetPropertyName("ResourceGroupId")
-        //        .DisableProcessLogOutput();
-        //});
 
-        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder); // # iacProjectFolder == project folder name "job-application
+        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder, PulumiAccessToken); // # iacProjectFolder == project folder name "job-application
         var resourceGroupId = variableOutputs.Named("ResourceGroupId");
         var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId");
         var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
@@ -128,7 +119,8 @@ class Build : NukeBuild
         Log.Information("Cleaning up source code directories"); //Nuke Build Telemetry: https://nuke.build/docs/fundamentals/logging/
         SourceCodeDir.GlobDirectories("**/bin", "**/obj").DeleteDirectories();
 
-        //AbsolutePath.CreateOrCleanDirectory(ArtifactsDir);
+        //AbsolutePath.CreateOrCleanDirectory(ArtifactsDir); // #TODO: FIX - But I just cant find that namespace :/
+
         EnsureCleanDirectory(ArtifactsDir);
     }
     #endregion
