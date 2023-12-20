@@ -12,6 +12,7 @@ using Serilog;
 
 namespace _build;
 public record AzureFunctionAppPublishingCredentials(string PublishingUserName, string PublishingPassword);
+
 public record AzureFunctionConfig(string SubscriptionId, string ResourceGroupName, string FunctionAppName);
 public static class ZipDeploy
 {

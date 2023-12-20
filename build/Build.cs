@@ -24,6 +24,7 @@ using Azure.Core;
 using Pulumi.AzureNative.NetApp.V20210401.Inputs;
 using _build;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 
 [GitHubActions("build-test-provision-deploy",
     GitHubActionsImage.UbuntuLatest,
@@ -61,6 +62,7 @@ class Build : NukeBuild
     #endregion
     #region Dynamic variables
     AzureFunctionConfig AzureFunctionConfig;
+    AzureStorageAccount AzureStorageAccount;
     #endregion
     #region Project config
 
@@ -89,9 +91,9 @@ class Build : NukeBuild
     readonly string PulumiAccessToken;
     Target IaC => _ => _.Requires(()=>AzureSubscriptionId).Requires(() => PulumiAccessToken).Requires(() => PulumiStackName).Requires(() => PulumiOrganization).Executes(() =>
     {
-        AzureFunctionConfig = GoProvisionInfrastructure();
+        (AzureFunctionConfig, AzureStorageAccount)  = GoProvisionInfrastructure();
     });
-    private AzureFunctionConfig GoProvisionInfrastructure()
+    private (AzureFunctionConfig azFunction, AzureStorageAccount azStorageAccount) GoProvisionInfrastructure()
     {
         string iacProjectFolder = PulumiStackName;
 
@@ -109,8 +111,9 @@ class Build : NukeBuild
         var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId");
         var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
         var resourceGroupName = variableOutputs.Named("ResourceGroupName");
+        var storageAccountName = variableOutputs.Named("StorageAccountName");
 
-        return new AzureFunctionConfig(AzureSubscriptionId ,resourceGroupName,linuxFunctionAppName);
+        return (new AzureFunctionConfig(AzureSubscriptionId ,resourceGroupName,linuxFunctionAppName), new AzureStorageAccount(storageAccountName));
     }
     #endregion
     #region Clean
@@ -168,6 +171,12 @@ class Build : NukeBuild
     private async Task GoDeploy()
     {
         await ZipDeploy.ThisArtifact(ZipDir).ToAzureFunction(AzureFunctionConfig);
+        var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
+        var blobServiceClient = AzureBlobClientFactory.Create(AzureStorageAccount.Name, azCredential);
+        var staticWebsite = new AzureStaticWebsiteDeployment(blobServiceClient);
+
+        await staticWebsite.Upload("", "");
+
     }
     #endregion
     #region AzureTasks
@@ -187,7 +196,7 @@ class Build : NukeBuild
     .Executes(() =>
     {
         // ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
-        var azCredential = new DefaultAzureCredential();
+        var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
         var azAccessToken = azCredential.GetToken(tokenRequestContext);
 

@@ -66,6 +66,8 @@ return await Deployment.RunAsync(() =>
     {
         ResourceGroupName = resourceGroup.Name,
         AccountName = storageAccount.Name,
+        Error404Document = "404.html",
+        IndexDocument = "index.html"
         
     });
 
@@ -74,6 +76,7 @@ return await Deployment.RunAsync(() =>
         ["ResourceGroupId"] = resourceGroup.Id,
         ["ResourceGroupName"] = resourceGroup.Name,
         ["LinuxFunctionAppId"] = linuxFunctionApp.Id,
-        ["LinuxFunctionAppName"] = linuxFunctionApp.Name
+        ["LinuxFunctionAppName"] = linuxFunctionApp.Name,
+        ["StorageAccountName"] = storageAccount.Name
     };
 });
