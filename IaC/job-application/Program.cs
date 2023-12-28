@@ -51,7 +51,9 @@ return await Deployment.RunAsync(() =>
         ServicePlanId = appServicePlan.Id,
         AuthSettings = new LinuxFunctionAppAuthSettingsArgs
         {
-            Enabled = false // #TODO: Figure out why this is not working (removing the need of code=xyz...)
+            Enabled = false,
+            UnauthenticatedClientAction = "AllowAnonymous",
+            TokenStoreEnabled = false
         },
         SiteConfig = new LinuxFunctionAppSiteConfigArgs
         {
@@ -68,7 +70,7 @@ return await Deployment.RunAsync(() =>
         AccountName = storageAccount.Name,
         Error404Document = "404.html",
         IndexDocument = "index.html"
-        
+
     });
 
     return new Dictionary<string, object?>

@@ -49,14 +49,16 @@ You will need the payed version in order to use organizations. It's cheep though
 6. Acquire your [Personal access token](https://app.pulumi.com/sukkergris/settings/tokens)
 7. COPY AND STORE THIS TOKEN SECURELY
 
-## Setting up mailchimp (Hour estimate)
+## Setting up emal sending smtp (1 hour)
 
-The free version will let you send 1.000 mails from your subscription.
-For most minor contact forms this should be enough.
+This solution is hardcoded to use ssl.
 
-1. Create an account
+I used zoho mail for this taks but both gmail and outlook should suffice.
 
-`#todo: Setup domain, manage integrations`
+1. Add your mail's user name to github action secrets. Environment variable: MAIL_USER_NAME
+2. Add your mail's password to github action secrets. Environment variable: MAIL_PW
+3. Add your mail's hostname to gihub action secrets. Environment variable: MAIL_HOST
+4. Add your mail's port to github action secrets. Environment variable: MAIL_HOST_PORT
 
 ## Setting up CLOUDFLARE (Hour estimate)
 
