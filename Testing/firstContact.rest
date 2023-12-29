@@ -1,6 +1,6 @@
 ###
-@appName=heisconform-dev-976e7b5
+@appName=heisconform-dev-5270b91
 @azureApiUr=azurewebsites.net/api
 @funcName=FirstContact
-@code=Wf2u_5aLkEFz8xYR2orf9Ta_OJOE43YUjhuVWUOsJXmhAzFutB8o2w==
-POST https://{{appName}}.{{azureApiUr}}/{{funcName}}?code={{code}}&name={{test}}
+@code=4_z6dfsFbHF8U9ZMWnsq4aKA5PJ4shqdiYnULEj6rDwIAzFu5uvTtA==
+POST https://{{appName}}.{{azureApiUr}}/{{funcName}}?code={{code}}&name=Homs

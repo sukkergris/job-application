@@ -14,24 +14,34 @@ public static class AzureBlobClientFactory
         var serviceUri = new Uri($"https://{storageAccountName}.blob.core.windows.net");
         return new BlobServiceClient(serviceUri,credential);
     }
-}
-public class AzureStaticWebsiteDeployment
-{
-    readonly BlobServiceClient _blobServiceClient;
-    readonly static string web = "$web";
-    public AzureStaticWebsiteDeployment(BlobServiceClient blobServiceClient)
+    public static async Task< BlobContainerClient> GetWebBlobContainerClient( this BlobServiceClient bsc)
     {
-        _blobServiceClient = blobServiceClient;
-    }
-    public async Task Upload(string filePath,string fileName)
-    {
-        var containerClient =  _blobServiceClient.GetBlobContainerClient(web);
-        var exists = await containerClient.ExistsAsync();
+        var web = "$web";
+        var webContainerClient = bsc.GetBlobContainerClient(web);
+        var exists = await webContainerClient.ExistsAsync();
         if (!exists)
         {
             throw new Exception($"The resource {web} should have been created using 'Pulumi'");
         }
-        var blobClient = containerClient.GetBlobClient(fileName);
-        await blobClient.UploadAsync(filePath);
+        return webContainerClient;
+
+    }
+}
+public class AzureStaticWebsiteDeployment
+{
+    readonly BlobContainerClient _webBlobContainerClient;
+    public AzureStaticWebsiteDeployment(BlobContainerClient webBlobContainerClient)
+    {
+        _webBlobContainerClient = webBlobContainerClient;
+    }
+    /// <summary>
+    /// </summary>
+    /// <param name="filePath">Path to file</param>
+    /// <param name="blobName">Becomes the name of the blob</param>
+    /// <returns></returns>
+    public async Task Upload(string filePath,string blobName)
+    {
+        var blobClient = _webBlobContainerClient.GetBlobClient(blobName);
+        await blobClient.UploadAsync(filePath); // #todo: Log response
     }
 }

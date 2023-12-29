@@ -9,6 +9,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Npm;
 using Nuke.Common.Tools.Pulumi;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.EnvironmentInfo;
@@ -51,7 +52,7 @@ class Build : NukeBuild
     AbsolutePath SourceCodeDir => RootDirectory / "src";
     AbsolutePath PublishDir => SourceCodeDir / $"{heiselberg_mails}/bin/{Configuration}/{dotnetRuntime}/Publish";
     AbsolutePath ArtifactsDir => RootDirectory / "artifacts";
-    AbsolutePath ZipDir => ArtifactsDir / $"app.zip";
+    AbsolutePath ZipDir => ArtifactsDir / "app.zip";
     #endregion
     #region Environment Configurations
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -138,7 +139,7 @@ class Build : NukeBuild
             .SetRuntime("linux-x64"));
     }
     #endregion
-    #region Compile
+    #region Compile backend
     Target Compile => _ => _
         .Executes(GoCompile);
     private void GoCompile()
@@ -154,6 +155,16 @@ class Build : NukeBuild
             );
     }
     #endregion
+    #region Compile Frontend
+    AbsolutePath FrontEndDir => SourceCodeDir / "Frontend-elm";
+    Target BuildFrontend => _ => _
+        .Executes(GoBuildFrontend);
+    private void GoBuildFrontend()
+    {
+        NpmTasks.NpmInstall(s => s.SetProcessWorkingDirectory(FrontEndDir));
+        //var result = NpmTasks.Npm()
+    }
+    #endregion
     #region Zip
     Target Zip => _ => _
         .Executes(GoZip);
@@ -164,19 +175,31 @@ class Build : NukeBuild
     }
     #endregion
     #region Deploy
-
+    AbsolutePath StaticWebsiteBaseDir => SourceCodeDir / "AzureStaticWebsite";
     Target Deploy => _ => _
         .OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(AzureFunctionConfig.FunctionAppName))
         .Executes(GoDeploy);
     private async Task GoDeploy()
     {
+        Log.Debug("Now deploying the azure function using zip deploy");
         await ZipDeploy.ThisArtifact(ZipDir).ToAzureFunction(AzureFunctionConfig);
+
+        Log.Debug("Now creating the static website");
         var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
-        var blobServiceClient = AzureBlobClientFactory.Create(AzureStorageAccount.Name, azCredential);
-        var staticWebsite = new AzureStaticWebsiteDeployment(blobServiceClient);
+        var webBlobContainerClient = await AzureBlobClientFactory
+            .Create(AzureStorageAccount.Name, azCredential)
+            .GetWebBlobContainerClient();
 
-        await staticWebsite.Upload("", "");
+        var staticWebsite = new AzureStaticWebsiteDeployment(webBlobContainerClient);
 
+        Log.Debug("Now uploading basic files to the static website");
+        // Every thing goes to the $web container
+        var index_html = "index.html";
+        await staticWebsite.Upload(StaticWebsiteBaseDir / index_html, index_html); // 'Index document name' as you selected in azure
+        var _404_html = "404.html";
+        await staticWebsite.Upload(StaticWebsiteBaseDir / _404_html, _404_html); // 'Error document path' as you selected in azure
+
+        Log.Debug("Here comes the exiting part where we sync what ever is in the front-end dir to the azure $web blob container");
     }
     #endregion
     #region AzureTasks
