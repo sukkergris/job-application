@@ -2,6 +2,7 @@ using Azure.Core;
 using Azure.Identity;
 using Azure.Storage;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace Build.Test;
 
@@ -33,13 +34,42 @@ public class UnitTest1
         var items = webContainerClient.GetBlobs();
         var names = string.Join(", ", items.Select(x=>x.Name));
         //Console.WriteLine(string.Join(",",items));
+        var blobs = webContainerClient.GetBlobsByHierarchy();
 
-        var blobClient = webContainerClient.GetBlobClient("index.html");
-
-        var index_html = "C:/private/private-job-application-app/src/AzureStaticWebsite/index.html";
-
-        await blobClient.UploadAsync(index_html);
+        //var blobClient = webContainerClient.GetBlobClient("index.html");
 
 
+
+        //var index_html = "C:/private/private-job-application-app/src/AzureStaticWebsite/index.html";
+
+        //var stream = new FileStream(index_html, FileMode.Open, FileAccess.Read);
+        //await blobClient.UploadAsync(content: stream, new BlobHttpHeaders { ContentType = "text/html" }, conditions: null);
+
+
+    }
+
+    [Fact]
+    public void ListFilesInFolder()
+    {
+        var root = "C:\\private\\private-job-application-app\\src\\AzureStaticWebsite";
+        var files = GetFileNames(root,root, new Dictionary<string,string>());
+    }
+    private static IReadOnlyDictionary<string,string> GetFileNames(string root, string path, IReadOnlyDictionary<string,string> files)
+    {
+        Dictionary<string,string> filesInDirs = new Dictionary<string, string>(files);
+        foreach (var dir in Directory.GetDirectories(path))
+        {
+            var filesInDir = GetFileNames(root, dir, filesInDirs);
+            foreach(var file in filesInDir)
+            {
+                 filesInDirs.Add( file.Key, file.Value);
+            }
+        }
+        var filesInPath = Directory.GetFiles(path).Select(x=>new KeyValuePair<string,string>(x.Remove(0, root.Length),x));
+        foreach (var file in filesInPath)
+        {
+            filesInDirs.Add(file.Key,file.Value);
+        }
+        return filesInDirs;
     }
 }

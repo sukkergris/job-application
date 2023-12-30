@@ -1,7 +1,13 @@
 ﻿using Azure.Identity;
 using Azure.Storage;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Nuke.Common.IO;
+using Serilog;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace _build;
@@ -36,15 +42,60 @@ public class AzureStaticWebsiteDeployment
     {
         _webBlobContainerClient = webBlobContainerClient;
     }
+    public async Task SyncStaticWebsiteBaseFiles(AbsolutePath pathToBaseFiles)
+    {
+        var index_html = "index.html"; // #todo: Move to config - maybe
+        await CreateOrOverwrite(pathToBaseFiles / index_html, index_html);
+
+        var _404_html = "404.html"; // #todo: Move to config - maybe
+        await CreateOrOverwrite(pathToBaseFiles / _404_html, _404_html);
+    }
+
+    public async Task SyncStaticWebsiteContentFiles(AbsolutePath frontendFiles)
+    {
+        Log.Debug("List existing blobs");
+        var blobsInAzure = _webBlobContainerClient.GetBlobs();
+
+        var filesInFrontendProject = Directory.GetDirectories(frontendFiles);
+
+        
+    }
     /// <summary>
     /// </summary>
     /// <param name="filePath">Path to file</param>
     /// <param name="blobName">Becomes the name of the blob</param>
     /// <returns></returns>
-    public async Task Upload(string filePath,string blobName)
+    private async Task CreateOrOverwrite(AbsolutePath filePath, string blobName)
     {
+        var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/html" };
+        BlobRequestConditions overwrite = null;
         var blobClient = _webBlobContainerClient.GetBlobClient(blobName);
-        var dimmer = await blobClient.ExistsAsync();
-        await blobClient.UploadAsync(filePath); // #todo: Log response
+        var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        await blobClient.UploadAsync(content: stream, httpHeaders: blobHttpHeaders, conditions: overwrite);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="path"></param>
+    /// <param name="files">Key: Blobname, Value: Absolute file path</param>
+    /// <returns></returns>
+    private static IReadOnlyDictionary<string, string> GetFileNames(string root, string path, IReadOnlyDictionary<string, string> files)
+    {
+        Dictionary<string, string> filesInDirs = new Dictionary<string, string>(files);
+        foreach (var dir in Directory.GetDirectories(path))
+        {
+            var filesInDir = GetFileNames(root, dir, filesInDirs);
+            foreach (var file in filesInDir)
+            {
+                filesInDirs.Add(file.Key, file.Value);
+            }
+        }
+        var filesInPath = Directory.GetFiles(path).Select(x => new KeyValuePair<string, string>(x.Remove(0, root.Length), x));
+        foreach (var file in filesInPath)
+        {
+            filesInDirs.Add(file.Key, file.Value);
+        }
+        return filesInDirs;
     }
 }

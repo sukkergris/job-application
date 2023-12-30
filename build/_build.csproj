@@ -17,7 +17,7 @@
     <PackageReference Include="Azure.ResourceManager" Version="1.9.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="Nuke.Common" Version="7.0.6" />
-    <PackageReference Include="Pulumi.AzureNative" Version="2.22.1" />
+    <PackageReference Include="Pulumi.AzureNative" Version="2.24.0" />
   </ItemGroup>
 
 </Project>

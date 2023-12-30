@@ -196,14 +196,11 @@ class Build : NukeBuild
 
         var staticWebsite = new AzureStaticWebsiteDeployment(webBlobContainerClient);
 
-        Log.Debug("Now uploading basic files to the static website");
+        Log.Debug($"Now uploading basic files to the static website from {StaticWebsiteBaseDir}");
         // Every thing goes to the $web container
-        var index_html = "index.html";
-        await staticWebsite.Upload(StaticWebsiteBaseDir / index_html, index_html); // 'Index document name' as you selected in azure
-        var _404_html = "404.html";
-        await staticWebsite.Upload(StaticWebsiteBaseDir / _404_html, _404_html); // 'Error document path' as you selected in azure
-
+        await staticWebsite.SyncStaticWebsiteBaseFiles(StaticWebsiteBaseDir);
         Log.Debug("Here comes the exiting part where we sync what ever is in the front-end dir to the azure $web blob container");
+
     }
     #endregion
     #region AzureTasks
