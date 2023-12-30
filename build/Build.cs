@@ -113,8 +113,9 @@ class Build : NukeBuild
         var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
         var resourceGroupName = variableOutputs.Named("ResourceGroupName");
         var storageAccountName = variableOutputs.Named("StorageAccountName");
+        var storageAccountKey = variableOutputs.Named("StorageAccountKey");
 
-        return (new AzureFunctionConfig(AzureSubscriptionId ,resourceGroupName,linuxFunctionAppName), new AzureStorageAccount(storageAccountName));
+        return (new AzureFunctionConfig(AzureSubscriptionId ,resourceGroupName,linuxFunctionAppName,AzureToken, storageAccountKey), new AzureStorageAccount(storageAccountName));
     }
     #endregion
     #region Clean
@@ -185,9 +186,12 @@ class Build : NukeBuild
         await ZipDeploy.ThisArtifact(ZipDir).ToAzureFunction(AzureFunctionConfig);
 
         Log.Debug("Now creating the static website");
-        var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
+        //var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
+
+        //Log.Debug($"Logged in as: {}");
+
         var webBlobContainerClient = await AzureBlobClientFactory
-            .Create(AzureStorageAccount.Name, azCredential)
+            .Create(AzureStorageAccount.Name, AzureFunctionConfig.StorageAccountKey)
             .GetWebBlobContainerClient();
 
         var staticWebsite = new AzureStaticWebsiteDeployment(webBlobContainerClient);
@@ -212,6 +216,7 @@ class Build : NukeBuild
     [Parameter("AZURE_TENANT_ID")]
     [Secret]
     readonly string AzureTenantId;
+    private string AzureToken;
     Target LoginToAzure => _ => _.DependentFor(IaC)
                                     .Requires(() => AzureClientId)
                                     .Requires(() => AzureClientSecret)
@@ -219,15 +224,16 @@ class Build : NukeBuild
     .Executes(() =>
     {
         // ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
-        var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
+        var defaultAzCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
-        var azAccessToken = azCredential.GetToken(tokenRequestContext);
+        var azAccessToken = defaultAzCredential.GetToken(tokenRequestContext);
 
         if (string.IsNullOrWhiteSpace(azAccessToken.Token)){
             Log.Debug("Could not acquire token based on 'DefaultAzureCredential()'");
         }
         else
             Log.Debug("Azure toke acquired");
+        AzureToken = azAccessToken.Token;
     });
     #endregion
 }

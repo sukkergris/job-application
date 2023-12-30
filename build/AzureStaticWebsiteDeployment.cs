@@ -1,4 +1,5 @@
 ﻿using Azure.Identity;
+using Azure.Storage;
 using Azure.Storage.Blobs;
 using System;
 using System.Threading.Tasks;
@@ -9,10 +10,11 @@ public record AzureStorageAccount(string Name);
 
 public static class AzureBlobClientFactory
 {
-    public static BlobServiceClient Create(string storageAccountName,DefaultAzureCredential credential)
+    public static BlobServiceClient Create(string storageAccountName,string accountKey)
     {
         var serviceUri = new Uri($"https://{storageAccountName}.blob.core.windows.net");
-        return new BlobServiceClient(serviceUri,credential);
+        var storageSharedKeyCredential = new StorageSharedKeyCredential(storageAccountName, accountKey);
+        return new BlobServiceClient(serviceUri,storageSharedKeyCredential);
     }
     public static async Task< BlobContainerClient> GetWebBlobContainerClient( this BlobServiceClient bsc)
     {
@@ -42,6 +44,7 @@ public class AzureStaticWebsiteDeployment
     public async Task Upload(string filePath,string blobName)
     {
         var blobClient = _webBlobContainerClient.GetBlobClient(blobName);
+        var dimmer = await blobClient.ExistsAsync();
         await blobClient.UploadAsync(filePath); // #todo: Log response
     }
 }

@@ -79,6 +79,7 @@ return await Deployment.RunAsync(() =>
         ["ResourceGroupName"] = resourceGroup.Name,
         ["LinuxFunctionAppId"] = linuxFunctionApp.Id,
         ["LinuxFunctionAppName"] = linuxFunctionApp.Name,
-        ["StorageAccountName"] = storageAccount.Name
+        ["StorageAccountName"] = storageAccount.Name,
+        ["StorageAccountKey"] = storageAccount.PrimaryAccessKey
     };
 });
