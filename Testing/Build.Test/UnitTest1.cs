@@ -34,8 +34,6 @@ public class UnitTest1
         var items = webContainerClient.GetBlobs();
         var names = string.Join(", ", items.Select(x=>x.Name));
         //Console.WriteLine(string.Join(",",items));
-        var blobs = webContainerClient.GetBlobsByHierarchy();
-
         //var blobClient = webContainerClient.GetBlobClient("index.html");
 
 

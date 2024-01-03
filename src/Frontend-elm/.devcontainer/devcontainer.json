@@ -1,5 +1,5 @@
 {
-	"name": "Elm (Community)",
+	"name": "Elm for the 'job-application'",
 	"dockerFile": "Dockerfile",
 	// In order to make elm-watch pick up changes
 	"containerEnv": { "CHOKIDAR_USEPOLLING": "true"},
@@ -40,6 +40,8 @@
 	// redownload dependencies.
 	// Adding this volume will preserve the elm cache between rebuilds though, fixing this issue
 	"mounts": [
-		"source=vscode-devcontainer-elm-dependency-cache,target=/home/node/.elm,type=volume"
+		"source=vscode-devcontainer-2-elm-dependency-cache,target=/home/node/.elm,type=volume"
 	]
+	, "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind"
+	, "workspaceFolder": "/workspace"
 }

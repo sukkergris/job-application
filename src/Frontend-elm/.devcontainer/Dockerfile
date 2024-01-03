@@ -29,4 +29,4 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && mkdir /home/$USERNAME/.elm \
     && chown $USERNAME:$USERNAME /home/$USERNAME/.elm
 
-RUN npm install -g elm-test elm-format
+RUN npm install -g run elm-test elm-format elm-watch

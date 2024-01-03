@@ -80,8 +80,10 @@ class Build : NukeBuild
     Target Clean => _ => _.Executes(GoClean);
     Target AndRestore => _ => _.DependsOn(Clean).Executes(GoRestore);
     Target AndCompile => _ => _.DependsOn(AndRestore).Executes(GoCompile);
+
+    Target AndBuildFrontend => _ => _.Executes(GoBuildFrontend);
     Target AndZip => _ => _.DependsOn(AndCompile).Executes(GoZip);
-    Target AndDeploy => _ => _.DependsOn(AndZip).DependsOn(IaC).OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(AzureFunctionConfig.FunctionAppName)).Executes(GoDeploy);
+    Target AndDeploy => _ => _.DependsOn(AndZip).DependsOn(IaC).DependsOn(AndBuildFrontend).OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(AzureFunctionConfig.FunctionAppName)).Executes(GoDeploy);
     #endregion
     #region Infrastructure
     [Parameter("AZURE_SUBSCRIPTION_ID")]
@@ -90,9 +92,9 @@ class Build : NukeBuild
     [Parameter("PULUMI_ACCESS_TOKEN")]
     [Secret]
     readonly string PulumiAccessToken;
-    Target IaC => _ => _.Requires(()=>AzureSubscriptionId).Requires(() => PulumiAccessToken).Requires(() => PulumiStackName).Requires(() => PulumiOrganization).Executes(() =>
+    Target IaC => _ => _.Requires(() => AzureSubscriptionId).Requires(() => PulumiAccessToken).Requires(() => PulumiStackName).Requires(() => PulumiOrganization).Executes(() =>
     {
-        (AzureFunctionConfig, AzureStorageAccount)  = GoProvisionInfrastructure();
+        (AzureFunctionConfig, AzureStorageAccount) = GoProvisionInfrastructure();
     });
     private (AzureFunctionConfig azFunction, AzureStorageAccount azStorageAccount) GoProvisionInfrastructure()
     {
@@ -107,7 +109,7 @@ class Build : NukeBuild
             .EnableSkipPreview()
                );
 
-        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder,stackName, PulumiAccessToken); // # iacProjectFolder == project folder name "job-application
+        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder, stackName, PulumiAccessToken); // # iacProjectFolder == project folder name "job-application
         var resourceGroupId = variableOutputs.Named("ResourceGroupId");
         var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId");
         var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
@@ -115,7 +117,7 @@ class Build : NukeBuild
         var storageAccountName = variableOutputs.Named("StorageAccountName");
         var storageAccountKey = variableOutputs.Named("StorageAccountKey");
 
-        return (new AzureFunctionConfig(AzureSubscriptionId ,resourceGroupName,linuxFunctionAppName,AzureToken, storageAccountKey), new AzureStorageAccount(storageAccountName));
+        return (new AzureFunctionConfig(AzureSubscriptionId, resourceGroupName, linuxFunctionAppName, AzureToken, storageAccountKey), new AzureStorageAccount(storageAccountName));
     }
     #endregion
     #region Clean
@@ -162,8 +164,9 @@ class Build : NukeBuild
         .Executes(GoBuildFrontend);
     private void GoBuildFrontend()
     {
-        NpmTasks.NpmInstall(s => s.SetProcessWorkingDirectory(FrontEndDir));
-        //var result = NpmTasks.Npm()
+        Log.Debug($"Now compiling elm");
+        NpmTasks.Npm("ci", workingDirectory: FrontEndDir);
+        NpmTasks.Npm("run compile", workingDirectory: FrontEndDir);
     }
     #endregion
     #region Zip
@@ -176,7 +179,6 @@ class Build : NukeBuild
     }
     #endregion
     #region Deploy
-    AbsolutePath StaticWebsiteBaseDir => SourceCodeDir / "AzureStaticWebsite";
     Target Deploy => _ => _
         .OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(AzureFunctionConfig.FunctionAppName))
         .Executes(GoDeploy);
@@ -187,7 +189,6 @@ class Build : NukeBuild
 
         Log.Debug("Now creating the static website");
         //var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
-
         //Log.Debug($"Logged in as: {}");
 
         var webBlobContainerClient = await AzureBlobClientFactory
@@ -196,11 +197,10 @@ class Build : NukeBuild
 
         var staticWebsite = new AzureStaticWebsiteDeployment(webBlobContainerClient);
 
-        Log.Debug($"Now uploading basic files to the static website from {StaticWebsiteBaseDir}");
         // Every thing goes to the $web container
-        await staticWebsite.SyncStaticWebsiteBaseFiles(StaticWebsiteBaseDir);
         Log.Debug("Here comes the exiting part where we sync what ever is in the front-end dir to the azure $web blob container");
 
+        await staticWebsite.SyncStaticWebsiteContentFiles(FrontEndDir / "wwwroot");
     }
     #endregion
     #region AzureTasks
@@ -221,15 +221,19 @@ class Build : NukeBuild
     .Executes(() =>
     {
         // ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
-        var defaultAzCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
+        var defaultAzCredential = new DefaultAzureCredential(includeInteractiveCredentials: false);
         var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
         var azAccessToken = defaultAzCredential.GetToken(tokenRequestContext);
 
-        if (string.IsNullOrWhiteSpace(azAccessToken.Token)){
+        if (string.IsNullOrWhiteSpace(azAccessToken.Token))
+        {
             Log.Debug("Could not acquire token based on 'DefaultAzureCredential()'");
         }
         else
+        {
             Log.Debug("Azure toke acquired");
+        }
+
         AzureToken = azAccessToken.Token;
     });
     #endregion

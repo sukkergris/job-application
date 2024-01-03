@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +42,7 @@ public class MyAzureFunction
 
         httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", base64Auth);
 
-        await using var package = File.OpenRead(_artifactPath);
+        await using var package = System.IO.File.OpenRead(_artifactPath);
 
         var streamContent = new StreamContent(package);
 
