@@ -408,3 +408,10 @@ FodyWeavers.xsd
 
 # Nuke
 .nuke/temp
+
+# Elm-lang
+**/elm-stuff/
+
+# elm-repl generated files
+repl-temp-*
+/Testing/Build.Test/integrationtest.json

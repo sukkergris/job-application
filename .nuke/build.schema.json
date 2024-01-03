@@ -105,10 +105,12 @@
           "items": {
             "type": "string",
             "enum": [
+              "AndBuildFrontend",
               "AndCompile",
               "AndDeploy",
               "AndRestore",
               "AndZip",
+              "BuildFrontend",
               "Clean",
               "Compile",
               "Deploy",
@@ -125,10 +127,12 @@
           "items": {
             "type": "string",
             "enum": [
+              "AndBuildFrontend",
               "AndCompile",
               "AndDeploy",
               "AndRestore",
               "AndZip",
+              "BuildFrontend",
               "Clean",
               "Compile",
               "Deploy",

@@ -15,8 +15,10 @@
     <PackageReference Include="Azure.Core" Version="1.36.0" />
     <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <PackageReference Include="Azure.ResourceManager" Version="1.9.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageReference Include="Microsoft.Bot.Builder.LanguageGeneration" Version="4.21.2" />
     <PackageReference Include="Nuke.Common" Version="7.0.6" />
-    <PackageReference Include="Pulumi.AzureNative" Version="2.21.2" />
+    <PackageReference Include="Pulumi.AzureNative" Version="2.24.0" />
   </ItemGroup>
 
 </Project>

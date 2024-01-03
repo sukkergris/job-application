@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Core;
-using Azure.Identity;
 using Newtonsoft.Json.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
@@ -12,7 +9,8 @@ using Serilog;
 
 namespace _build;
 public record AzureFunctionAppPublishingCredentials(string PublishingUserName, string PublishingPassword);
-public record AzureFunctionConfig(string SubscriptionId, string ResourceGroupName, string FunctionAppName);
+
+public record AzureFunctionConfig(string SubscriptionId, string ResourceGroupName, string FunctionAppName, string AzAccessToken, string StorageAccountKey);
 public static class ZipDeploy
 {
     public static MyAzureFunction ThisArtifact(AbsolutePath artifactPath)
@@ -29,18 +27,9 @@ public class MyAzureFunction
     readonly AbsolutePath _artifactPath;
     public async Task ToAzureFunction(AzureFunctionConfig config)
     {
-        // https://learn.microsoft.com/en-us/azure/governance/resource-graph/first-query-rest-api
-        var azCredential = new DefaultAzureCredential(); // new DefaultAzureCredential(); // new AzureCliCredential();
-        var tokenRequestContext = new TokenRequestContext(new[] { "https://management.azure.com/.default" });
-        var azAccessToken = await azCredential.GetTokenAsync(tokenRequestContext);
-        if (string.IsNullOrEmpty(azAccessToken.Token))
-        {
-            Log.Error("Azure token not acquired. Try to login using: 'az login'");
-            Assert.Fail("Azure token not acquired");
-        }
-        Log.Debug("Azure token acquired");
 
-        var publishingCredentials = await GetCredentials(config, azAccessToken);
+
+        var publishingCredentials = await GetCredentials(config);
 
         await Publish(config, publishingCredentials);
     }
@@ -53,7 +42,7 @@ public class MyAzureFunction
 
         httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", base64Auth);
 
-        await using var package = File.OpenRead(_artifactPath);
+        await using var package = System.IO.File.OpenRead(_artifactPath);
 
         var streamContent = new StreamContent(package);
 
@@ -73,10 +62,10 @@ public class MyAzureFunction
         }
         Log.Debug("Azure function deployed");
     }
-    private async Task<AzureFunctionAppPublishingCredentials> GetCredentials(AzureFunctionConfig config, AccessToken token)
+    private async Task<AzureFunctionAppPublishingCredentials> GetCredentials(AzureFunctionConfig config)
     {
         using var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Token);
+        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", config.AzAccessToken);
 
         var getPublishingCredentials = $"https://management.azure.com/subscriptions/{config.SubscriptionId}/resourceGroups/{config.ResourceGroupName}/providers/Microsoft.Web/sites/{config.FunctionAppName}/config/publishingcredentials/list?api-version=2019-08-01";
         var response = await httpClient.PostAsync(getPublishingCredentials, null);

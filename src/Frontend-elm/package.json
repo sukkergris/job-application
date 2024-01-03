@@ -1,0 +1,16 @@
+{
+  "name": "frontend-elm",
+  "version": "1.0.0",
+  "description": "Let's play with elm",
+  "scripts": {
+    "compile": "elm make src/Main.elm --output=wwwroot/elm.js",
+    "hot": "elm-watch hot",
+    "build": "elm-watch make --optimize",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Theodor A. H. Heiselberg",
+  "license": "ISC",
+  "devDependencies": {
+  }
+}
