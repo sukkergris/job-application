@@ -34,7 +34,7 @@ return await Deployment.RunAsync(() =>
         PublicNetworkAccessEnabled = true
     });
 
-    var appServicePlan = new Pulumi.Azure.AppService.ServicePlan($"{application}-{environment}-", new()
+    var appServicePlan = new ServicePlan($"{application}-{environment}-", new()
     {
         ResourceGroupName = resourceGroup.Name,
         Location = resourceGroup.Location,
@@ -70,7 +70,16 @@ return await Deployment.RunAsync(() =>
         AccountName = storageAccount.Name,
         Error404Document = "404.html",
         IndexDocument = "index.html"
+    });
 
+    var cdnProfile = new Pulumi.AzureNative.Cdn.Profile($"{application}-",new Pulumi.AzureNative.Cdn.ProfileArgs {
+        Location = resourceGroup.Location,
+        ProfileName = $"cdn-heis-sw",
+        ResourceGroupName = resourceGroup.Name,
+        Sku = new Pulumi.AzureNative.Cdn.Inputs.SkuArgs
+        {
+            Name = "Standard_Microsoft" // https://www.pulumi.com/registry/packages/azure-native/api-docs/cdn/profile/#sku
+        }
     });
 
     return new Dictionary<string, object?>
@@ -80,6 +89,7 @@ return await Deployment.RunAsync(() =>
         ["LinuxFunctionAppId"] = linuxFunctionApp.Id,
         ["LinuxFunctionAppName"] = linuxFunctionApp.Name,
         ["StorageAccountName"] = storageAccount.Name,
-        ["StorageAccountKey"] = storageAccount.PrimaryAccessKey
+        ["StorageAccountKey"] = storageAccount.PrimaryAccessKey,
+        ["StorageAccountDefaultEndpoint"] = storageAccount.PrimaryWebEndpoint
     };
 });

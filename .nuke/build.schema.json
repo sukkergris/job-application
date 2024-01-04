@@ -11,11 +11,6 @@
           "description": "AZURE_CLIENT_ID",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
-        "AzureClientSecret": {
-          "type": "string",
-          "description": "AZURE_CLIENT_SECRET",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
-        },
         "AzureSubscriptionId": {
           "type": "string",
           "description": "AZURE_SUBSCRIPTION_ID",

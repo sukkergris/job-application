@@ -30,7 +30,7 @@ using Azure.Storage.Blobs;
 [GitHubActions("build-test-provision-deploy",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
-    ImportSecrets = new[] { nameof(PulumiAccessToken), nameof(AzureClientSecret), nameof(AzureTenantId), nameof(AzureClientId), nameof(PulumiStackName), nameof(PulumiOrganization) })
+    ImportSecrets = new[] { nameof(PulumiAccessToken), nameof(AzureTenantId), nameof(AzureClientId), nameof(PulumiStackName), nameof(PulumiOrganization) })
     ]
 class Build : NukeBuild
 {
@@ -207,16 +207,16 @@ class Build : NukeBuild
     [Parameter("AZURE_CLIENT_ID")]
     [Secret]
     readonly string AzureClientId;
-    [Parameter("AZURE_CLIENT_SECRET")]
-    [Secret]
-    readonly string AzureClientSecret;
+    //[Parameter("AZURE_CLIENT_SECRET")]
+    //[Secret]
+    //readonly string AzureClientSecret;
     [Parameter("AZURE_TENANT_ID")]
     [Secret]
     readonly string AzureTenantId;
     private string AzureToken;
     Target LoginToAzure => _ => _.DependentFor(IaC)
                                     .Requires(() => AzureClientId)
-                                    .Requires(() => AzureClientSecret)
+                                    //.Requires(() => AzureClientSecret)
                                     .Requires(() => AzureTenantId)
     .Executes(() =>
     {
@@ -231,7 +231,7 @@ class Build : NukeBuild
         }
         else
         {
-            Log.Debug("Azure toke acquired");
+            Log.Debug("Azure toke acquired using 'DefaultAzureCredential'");
         }
 
         AzureToken = azAccessToken.Token;

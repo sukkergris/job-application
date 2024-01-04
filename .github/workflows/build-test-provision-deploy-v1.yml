@@ -16,10 +16,11 @@
 
 name: build-test-provision-deploy
 
+permissions:
+  id-token: write
+
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   ubuntu-latest:
@@ -29,7 +30,9 @@ jobs:
       - name: Azure login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - run: |
           echo ${{ vars.FOO }}
           az webapp list --query "[?state=='Running']"
@@ -47,7 +50,6 @@ jobs:
         run: ./build.cmd
         env:
           PulumiAccessToken: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          AzureClientSecret: ${{ secrets.AZURE_CLIENT_SECRET }}
           AzureTenantId: ${{ secrets.AZURE_TENANT_ID }}
           AzureClientId: ${{ secrets.AZURE_CLIENT_ID }}
           AzureSubscriptionId: ${{secrets.AZURE_SUBSCRIPTION_ID}}
