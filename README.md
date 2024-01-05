@@ -37,6 +37,17 @@ Copy the subscription ID and send it to your developer.
 
 Now go to [Microsoft extra - (Active Directory)](https://entra.microsoft.com) and add your developers user to your new subscription. The dev needs to be `owner` in order to provission the infrastructure
 
+### Setup using custom domain name
+
+1. storage-account => Networking => Custom domain => www.YOUR_DOMAIN_NAME.TLD // Eg. www.young-heiselberg.com
+2. Front Door and CDN => Host name (YOUR_DOMAIN_NAME.azureedge.net) => + Endpoint
+
+Endpoint:
+
+* Custom domain HTTPS (On)
+* Certificate management type (CDN managed)
+* Minimum TLS version (TLS 1.2)
+
 ## Setting up Pulumi (1 hour)
 
 You will need the payed version in order to use organizations. It's cheep though.
@@ -60,9 +71,14 @@ I used zoho mail for this taks but both gmail and outlook should suffice.
 3. Add your mail's hostname to gihub action secrets. Environment variable: MAIL_HOST
 4. Add your mail's port to github action secrets. Environment variable: MAIL_HOST_PORT
 
-## Setting up CLOUDFLARE (Hour estimate)
+## Setting up CLOUDFLARE (1 hour)
 
- 1. Add CAPTCHA
+ 1. Validate domain ownership for mail supplier
+ 2. Validate domain ownership for azure (Custum domanin)
+ 3. Add dns records
+ 4. Add page redirect rule
+
+* Add CAPTCHA
 
 ## Setting up GitHub (1 hour)
 
@@ -82,7 +98,7 @@ In order to login to azure when running an github action. A service principle is
 2. Run: `read-env-var-from.secrets.env.ps1`
 3. Run: `az ad sp create-for-rbac --name "{YOUR_NEW_SERVICE_PRINCIPAL_NAME}" --role contributor --scope /subscriptions/$Env:AZURE_SUBSCRIPTION_ID --sdk-auth`
 
-## Apply SP
+## Apply SP (Service principal)
 
 1. Copy the json output.
 2. Go to [Actions secrets and variables](https://github.com/sukkergris/job-application/settings/secrets/actions)
