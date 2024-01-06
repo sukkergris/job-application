@@ -3,6 +3,9 @@ using Pulumi.Azure.AppService;
 using Pulumi.Azure.AppService.Inputs;
 using Pulumi.Azure.AppService.Outputs;
 using Pulumi.Azure.Core;
+using Pulumi.Azure.Network;
+using Pulumi.Azure.Network.Outputs;
+using Pulumi.AzureNative.Network;
 using System.Collections.Generic;
 
 return await Deployment.RunAsync(() =>
@@ -70,6 +73,27 @@ return await Deployment.RunAsync(() =>
         AccountName = storageAccount.Name,
         Error404Document = "404.html",
         IndexDocument = "index.html"
+    });
+
+
+    //var domain = new Pulumi.AzureNative.DomainRegistration.Domain($"young-heiselberg",new Pulumi.AzureNative.DomainRegistration.DomainArgs
+    //{
+
+    //});
+
+    //var dnsZoneName = "heiselberg";
+    //var dnsZone = new Pulumi.Azure.Dns.Zone(dnsZoneName, new Pulumi.Azure.Dns.ZoneArgs { 
+    //    Name = dnsZoneName,
+    //    ResourceGroupName = resourceGroup.Name
+    //});
+
+    //var record = new Pulumi.Azure.Dns.CNameRecord("dimmer", new Pulumi.Azure.Dns.CNameRecordArgs {
+
+    //});
+
+    var staticIp = new  PublicIp("young-heiselberg-ip", new PublicIpArgs
+    {
+        ResourceGroupName = resourceGroup.Name
     });
 
     var cdnProfile = new Pulumi.AzureNative.Cdn.Profile($"{application}-",new Pulumi.AzureNative.Cdn.ProfileArgs {
