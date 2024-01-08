@@ -3,7 +3,6 @@ using Pulumi.Azure.AppService;
 using Pulumi.Azure.AppService.Inputs;
 using Pulumi.Azure.Core;
 using Pulumi.Azure.Network;
-using Pulumi.AzureNative.Authorization;
 using System.Collections.Generic;
 
 return await Deployment.RunAsync(() =>
@@ -12,32 +11,11 @@ return await Deployment.RunAsync(() =>
     var resourceType = "rg";
     var application = "heisconform"; // heiselberg-contact-form
 
-    // var gitHubReposName = "job-application";
-
     // Stack specific configurations
     var azureConfig = new Config("azure"); // Pulumi.{stack}.yaml
     var azLocation = azureConfig.Require("location");
     var environment = Deployment.Instance.StackName;
 
-
-
-    // Create an Azure AD Application
-
-    //var adApplication = new Pulumi.AzureAD.Application(application, new Pulumi.AzureAD.ApplicationArgs
-    //{
-    //    DisplayName = application
-    //});
-
-    //var roleAssignment = new RoleAssignment("", new RoleAssignmentArgs {
-    //    Scope = "/subscriptions/SUBSCRIPTION_ID",
-    //    RoleDefinitionId = "Contributor",
-    //    PrincipalId = adApplication.ApplicationId
-    //});
-
-    // var instanceCount = "001";
-
-    // Create an Azure Resource Group {resource-type}-{application}-{environment}-{az-region}-{instance-count}
-    // {rg}-{heiselberg-contact-form}-{dev}-{northeurope}-{001}-{pulumi-id(AUTO)}
     var resourceGroupName = $"{resourceType}-{application}-{environment}-{azLocation}-";
 
     var resourceGroup = new ResourceGroup(resourceGroupName, new() { Location = azLocation });
@@ -92,27 +70,6 @@ return await Deployment.RunAsync(() =>
         IndexDocument = "index.html"
     });
 
-
-    //var domain = new Pulumi.AzureNative.DomainRegistration.Domain($"young-heiselberg",new Pulumi.AzureNative.DomainRegistration.DomainArgs
-    //{
-
-    //});
-
-    //var dnsZoneName = "heiselberg";
-    //var dnsZone = new Pulumi.Azure.Dns.Zone(dnsZoneName, new Pulumi.Azure.Dns.ZoneArgs { 
-    //    Name = dnsZoneName,
-    //    ResourceGroupName = resourceGroup.Name
-    //});
-
-    //var record = new Pulumi.Azure.Dns.CNameRecord("dimmer", new Pulumi.Azure.Dns.CNameRecordArgs {
-
-    //});
-
-    var staticIp = new  PublicIp("young-heiselberg-ip", new PublicIpArgs
-    {
-        ResourceGroupName = resourceGroup.Name
-    });
-
     var cdnProfile = new Pulumi.AzureNative.Cdn.Profile($"{application}-",new Pulumi.AzureNative.Cdn.ProfileArgs {
         Location = resourceGroup.Location,
         ProfileName = $"cdn-heis-sw",
@@ -121,6 +78,7 @@ return await Deployment.RunAsync(() =>
         {
             Name = "Standard_Microsoft" // https://www.pulumi.com/registry/packages/azure-native/api-docs/cdn/profile/#sku
         }
+
     });
 
     return new Dictionary<string, object?>
