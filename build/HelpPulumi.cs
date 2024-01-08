@@ -9,14 +9,16 @@ public class GetVariableOutput
     readonly AbsolutePath _stackPath;
     readonly string _stackName;
     readonly string _pulumiAccessToken;
+    readonly string _ARM_USE_OIDC;
 
-    public static GetVariableOutput FromStack(AbsolutePath stack,string stackName, string pulumiAccessToken) => new GetVariableOutput(stack,stackName, pulumiAccessToken);
+    public static GetVariableOutput FromStack(AbsolutePath stack,string stackName, string pulumiAccessToken, string ARM_USE_OIDC) => new GetVariableOutput(stack,stackName, pulumiAccessToken, ARM_USE_OIDC);
 
-    private GetVariableOutput(AbsolutePath stackPath,string stackName,string pulumiAccessToken)
+    private GetVariableOutput(AbsolutePath stackPath,string stackName,string pulumiAccessToken, string ARM_USE_OIDC)
     {
         _stackPath = stackPath;
         _stackName = stackName;
         _pulumiAccessToken = pulumiAccessToken;
+        _ARM_USE_OIDC = ARM_USE_OIDC;
     }
     public string Named(string propName)
     {
@@ -25,6 +27,7 @@ public class GetVariableOutput
 
         return PulumiTasks.PulumiStackOutput(_ => _
             .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",_pulumiAccessToken)
+            .SetProcessEnvironmentVariable("ARM_USE_OIDC", _ARM_USE_OIDC)
             .SetCwd(_stackPath)
             .SetPropertyName(propName)
             .EnableShowSecrets()

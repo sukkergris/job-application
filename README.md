@@ -92,11 +92,14 @@ In order to login to azure when running an github action. A service principle is
 
 ## Create SP and Secrets using hardcoded values (or see next step for using env)
 
+(_This is more sutable for local development_)
+
 Learn: [Azure RBAC](https://www.youtube.com/watch?v=1OBi93apLdo)
 
 1. Run: `az login`
 2. Set default subscription: Run `az account set --subscription $Env:AZURE_SUBSCRIPTION_I`
 3. Run: `az ad sp create-for-rbac --name "YOUR_NEW_SERVICE_PRINCIPAL_NAME" --role contributor --scope /subscriptions/YOUR_SUBSCRIPTION_ID_HERE --sdk-auth`
+4. Copy the json output
 
 ## Create SP using Env Variables
 
@@ -104,6 +107,7 @@ Learn: [Azure RBAC](https://www.youtube.com/watch?v=1OBi93apLdo)
 2. Run: `read-env-var-from.secrets.env.ps1`
 3. Run: `az login`
 4. Run: `az ad sp create-for-rbac --name "YOUR_NEW_SERVICE_PRINCIPAL_NAME" --role contributor --scope /subscriptions/$Env:AZURE_SUBSCRIPTION_ID --sdk-auth`
+5. Copy the json output
 
 ## Apply SP (Service principal)
 

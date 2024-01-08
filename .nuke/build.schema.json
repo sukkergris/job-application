@@ -6,6 +6,10 @@
     "build": {
       "type": "object",
       "properties": {
+        "ARM_USE_OIDC": {
+          "type": "string",
+          "description": "ARM_USE_OIDC"
+        },
         "AzureClientId": {
           "type": "string",
           "description": "AZURE_CLIENT_ID",
