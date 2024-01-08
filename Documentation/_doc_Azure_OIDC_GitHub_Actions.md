@@ -24,3 +24,22 @@ Works with eg. Azure resources.
 
 * `client-id`: ${{ secrets.AZURE_CLIENT_ID }} // Get the value from the SP just created
 * `tenant-id`: ${{ secrets.AZURE_TENANT_ID }} // Get the value from the SP just created
+
+## Add SP to eg. Subscription
+
+### Add Member
+
+Home -> YOUR_SUBSCRIPTION -> Access control (IAM) -> [+Add] -> Add role assignment -> Members
+
+* Assign access to: (User, group, or service principal)
+* Menbers -> [+Select members] (Search using SP name)
+
+Press [Select]
+
+### Add Role
+
+Back on the `Add role assignment` seletc the `Role` phane:
+
+### Finalize
+
+Back on the `Add role assignmen` press [next]
