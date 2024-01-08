@@ -41,3 +41,4 @@ jobs:
           AzureSubscriptionId: ${{secrets.AZURE_SUBSCRIPTION_ID}}
           PulumiStackName: ${{ vars.PULUMI_STACK_NAME }}
           PulumiOrganization: ${{ vars.PULUMI_ORGANIZATION }}
+          ARM_USE_OIDC: ${{vars.ARM_USE_OIDC }}
