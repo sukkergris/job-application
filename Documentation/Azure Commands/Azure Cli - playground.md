@@ -43,3 +43,5 @@ You take the role definition assign it to a security principle and apply it to a
 ## Who is logged in
 
 az ad signed-in-user show
+
+## Create SP
