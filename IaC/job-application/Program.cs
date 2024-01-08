@@ -1,21 +1,30 @@
 ﻿using Pulumi;
 using Pulumi.Azure.AppService;
 using Pulumi.Azure.AppService.Inputs;
-using Pulumi.Azure.AppService.Outputs;
 using Pulumi.Azure.Core;
 using Pulumi.Azure.Network;
-using Pulumi.Azure.Network.Outputs;
-using Pulumi.AzureNative.Network;
 using System.Collections.Generic;
 
 return await Deployment.RunAsync(() =>
 {
-    var azureConfig = new Config("azure"); // Pulumi.{stack}.yaml
-    var azLocation = azureConfig.Require("location");
+    // Static project specific configuirations
     var resourceType = "rg";
     var application = "heisconform"; // heiselberg-contact-form
+    var gitHubReposName = "job-application";
 
+    // Stack specific configurations
+    var azureConfig = new Config("azure"); // Pulumi.{stack}.yaml
+    var azLocation = azureConfig.Require("location");
     var environment = Deployment.Instance.StackName;
+
+
+
+    // Create an Azure AD Application
+
+    var adApplication = new Pulumi.AzureAD.Application(application, new Pulumi.AzureAD.ApplicationArgs
+    {
+        DisplayName = application
+    });
 
     // var instanceCount = "001";
 
