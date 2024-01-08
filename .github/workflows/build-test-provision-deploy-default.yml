@@ -1,5 +1,8 @@
 name: build-test-provision-deploy
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
 #on:

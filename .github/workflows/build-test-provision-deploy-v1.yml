@@ -2,6 +2,7 @@ name: build-test-provision-deploy-v1
 
 permissions:
   id-token: write
+  contents: read
 
 on:
   workflow_dispatch:
