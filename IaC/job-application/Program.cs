@@ -3,6 +3,7 @@ using Pulumi.Azure.AppService;
 using Pulumi.Azure.AppService.Inputs;
 using Pulumi.Azure.Core;
 using Pulumi.Azure.Network;
+using Pulumi.AzureNative.Authorization;
 using System.Collections.Generic;
 
 return await Deployment.RunAsync(() =>
@@ -10,7 +11,8 @@ return await Deployment.RunAsync(() =>
     // Static project specific configuirations
     var resourceType = "rg";
     var application = "heisconform"; // heiselberg-contact-form
-    var gitHubReposName = "job-application";
+
+    // var gitHubReposName = "job-application";
 
     // Stack specific configurations
     var azureConfig = new Config("azure"); // Pulumi.{stack}.yaml
@@ -21,10 +23,16 @@ return await Deployment.RunAsync(() =>
 
     // Create an Azure AD Application
 
-    var adApplication = new Pulumi.AzureAD.Application(application, new Pulumi.AzureAD.ApplicationArgs
-    {
-        DisplayName = application
-    });
+    //var adApplication = new Pulumi.AzureAD.Application(application, new Pulumi.AzureAD.ApplicationArgs
+    //{
+    //    DisplayName = application
+    //});
+
+    //var roleAssignment = new RoleAssignment("", new RoleAssignmentArgs {
+    //    Scope = "/subscriptions/SUBSCRIPTION_ID",
+    //    RoleDefinitionId = "Contributor",
+    //    PrincipalId = adApplication.ApplicationId
+    //});
 
     // var instanceCount = "001";
 

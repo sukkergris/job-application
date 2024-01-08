@@ -86,7 +86,11 @@ In order to login to azure when running an github action. A service principle is
 
 **In the console use the following commands:**
 
-## Create SP using hardcoded values (or see next step for using env)
+## Create SP using OIDC (Recomended)
+
+[Link](/Documentation/_doc_Azure_OIDC_GitHub_Actions.md)
+
+## Create SP and Secrets using hardcoded values (or see next step for using env)
 
 Learn: [Azure RBAC](https://www.youtube.com/watch?v=1OBi93apLdo)
 

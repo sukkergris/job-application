@@ -8,6 +8,8 @@ Works with eg. Azure resources.
 
 ## Using Pulumi
 
+// #todo: Add code and description on how to use. Use the manual step until then.
+
 ## Using The Azure Portal
 
 [Youtube - ASP.NET MONSTERS](https://www.youtube.com/watch?v=qSIs7HzgpiA&t=137s)
@@ -39,6 +41,12 @@ Press [Select]
 ### Add Role
 
 Back on the `Add role assignment` seletc the `Role` phane:
+
+Select `Privileged administrator roles`
+
+* Select `Contributor`
+
+[Review + assign]
 
 ### Finalize
 
