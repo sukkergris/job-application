@@ -211,9 +211,7 @@ class Build : NukeBuild
     [Parameter("AZURE_CLIENT_ID")]
     [Secret]
     readonly string AzureClientId;
-    //[Parameter("AZURE_CLIENT_SECRET")]
-    //[Secret]
-    //readonly string AzureClientSecret;
+
     [Parameter("AZURE_TENANT_ID")]
     [Secret]
     readonly string AzureTenantId;
