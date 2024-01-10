@@ -1,4 +1,4 @@
-name: build-test-provision-deploy-az-oidc-v1
+name: build-test-provision-deploy-az-oidc
 
 permissions:
   id-token: write
