@@ -37,6 +37,6 @@ jobs:
           AzureSubscriptionId: ${{secrets.AZURE_SUBSCRIPTION_ID}}
           PulumiStackName: ${{ vars.PULUMI_STACK_NAME }}
           PulumiOrganization: ${{ vars.PULUMI_ORGANIZATION }}
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS.clientId) }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS.tenantId) }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS.subscriptionId) }}
+          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
