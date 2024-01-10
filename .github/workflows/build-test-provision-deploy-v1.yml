@@ -1,11 +1,13 @@
-name: build-test-provision-deploy-v1
+name: build-test-provision-deploy-az-credentials
 
 permissions:
   id-token: write
   contents: read
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   ubuntu-latest:
