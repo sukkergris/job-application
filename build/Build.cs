@@ -30,7 +30,7 @@ using Azure.Storage.Blobs;
 [GitHubActions("build-test-provision-deploy",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
-    ImportSecrets = new[] { nameof(PulumiAccessToken), nameof(AzureTenantId), nameof(AzureClientId), nameof(PulumiStackName), nameof(PulumiOrganization) })
+    ImportSecrets = new[] { nameof(PulumiAccessToken), nameof(PulumiStackName), nameof(PulumiOrganization) })
     ]
 class Build : NukeBuild
 {
@@ -93,9 +93,9 @@ class Build : NukeBuild
     [Secret]
     readonly string PulumiAccessToken;
     Target IaC => _ => _.Requires(() => AzureSubscriptionId).Requires(() => PulumiAccessToken).Requires(() => PulumiStackName).Requires(() => PulumiOrganization).Executes(() =>
-    {
-        (AzureFunctionConfig, AzureStorageAccount) = GoProvisionInfrastructure();
-    });
+      {
+          (AzureFunctionConfig, AzureStorageAccount) = GoProvisionInfrastructure();
+      });
     private (AzureFunctionConfig azFunction, AzureStorageAccount azStorageAccount) GoProvisionInfrastructure()
     {
         string iacProjectFolder = PulumiStackName;
@@ -109,7 +109,7 @@ class Build : NukeBuild
             .SetStack(stackName)
             .EnableSkipPreview()
                );
-        
+
         var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder, stackName); // # iacProjectFolder == project folder name "job-application
         var resourceGroupId = variableOutputs.Named("ResourceGroupId");
         var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId");
@@ -205,19 +205,8 @@ class Build : NukeBuild
     }
     #endregion
     #region AzureTasks
-    [Parameter("AZURE_CLIENT_ID")]
-    [Secret]
-    readonly string AzureClientId;
-
-    [Parameter("AZURE_TENANT_ID")]
-    [Secret]
-    readonly string AzureTenantId;
     private string AzureToken;
-    Target LoginToAzure => _ => _.DependentFor(IaC)
-                                    .Requires(() => AzureClientId)
-                                    //.Requires(() => AzureClientSecret)
-                                    .Requires(() => AzureTenantId)
-    .Executes(() =>
+    Target LoginToAzure => _ => _.DependentFor(IaC).Executes(() =>
     {
         // ProcessTasks.StartProcess("az", $"login --service-principal --username {AzureClientId} --password {AzureClientSecret} --tenant {AzureTenantId}", RootDirectory);
         var defaultAzCredential = new DefaultAzureCredential(includeInteractiveCredentials: false);

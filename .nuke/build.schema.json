@@ -6,23 +6,9 @@
     "build": {
       "type": "object",
       "properties": {
-        "ARM_USE_OIDC": {
-          "type": "string",
-          "description": "ARM_USE_OIDC"
-        },
-        "AzureClientId": {
-          "type": "string",
-          "description": "AZURE_CLIENT_ID",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
-        },
         "AzureSubscriptionId": {
           "type": "string",
           "description": "AZURE_SUBSCRIPTION_ID",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
-        },
-        "AzureTenantId": {
-          "type": "string",
-          "description": "AZURE_TENANT_ID",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "Configuration": {
