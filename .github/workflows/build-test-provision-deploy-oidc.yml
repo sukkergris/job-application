@@ -44,8 +44,4 @@ jobs:
           AzureSubscriptionId: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
           PulumiStackName: ${{ vars.PULUMI_STACK_NAME }}
           PulumiOrganization: ${{ vars.PULUMI_ORGANIZATION }}
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
-          ARM_LOCATION_NAME: ${{ vars.ARM_LOCATION_NAME }}
           ARM_USE_OIDC: true
