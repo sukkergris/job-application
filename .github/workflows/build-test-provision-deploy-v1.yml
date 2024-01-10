@@ -31,6 +31,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
+      - name: 'Login to azure'
+        run: az login --identity
       - name: 'Run: '
         run: ./build.cmd
         env:

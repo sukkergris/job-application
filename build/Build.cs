@@ -106,6 +106,15 @@ class Build : NukeBuild
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
         Log.Warning($"PulumiToken: {PulumiAccessToken}");
         Log.Warning($"ARM_USE_OIDC: {ARM_USE_OIDC}");
+        // Obtain necessary Azure authentication variables from your current environment
+        string armClientId = Environment.GetEnvironmentVariable("ARM_CLIENT_ID");
+        string armClientSecret = Environment.GetEnvironmentVariable("ARM_CLIENT_SECRET");
+        string armTenantId = Environment.GetEnvironmentVariable("ARM_TENANT_ID");
+        string armSubscriptionId = Environment.GetEnvironmentVariable("ARM_SUBSCRIPTION_ID");
+        bool useMsi = bool.Parse(Environment.GetEnvironmentVariable("ARM_USE_MSI") ?? "false");
+
+        Log.Warning($"ArmClientId: {armClientId}");
+
         var resp = PulumiTasks.PulumiUp(_ => _
             .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken)
             .SetProcessEnvironmentVariable("ARM_USE_OIDC", ARM_USE_OIDC)
