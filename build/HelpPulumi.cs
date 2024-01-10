@@ -1,6 +1,8 @@
 ﻿using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Pulumi;
+using Pulumi;
+using System;
 
 namespace _build;
 
@@ -17,11 +19,13 @@ public class GetVariableOutput
     {
         _stackPath = stackPath;
         _stackName = stackName;
-        _pulumiAccessToken = pulumiAccessToken;
+        _pulumiAccessToken = pulumiAccessToken ?? throw new System.ArgumentNullException();
         _ARM_USE_OIDC = ARM_USE_OIDC;
     }
-    public string Named(string propName)
+    public string Named(string propName, Action<string> logger)
     {
+        logger($"StackPaht: {_stackPath}");
+        logger($"StackName: {_stackName}");
         // #TODO: Figure out why this hack is necessary
         PulumiTasks.PulumiStackSelect(_=>_.SetCwd(_stackPath).SetStackName(_stackName));
 
