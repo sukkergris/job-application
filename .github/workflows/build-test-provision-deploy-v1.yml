@@ -41,4 +41,4 @@ jobs:
           ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS.clientSecret) }}
           ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
           ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_LOCATION_NAME: ${{ vars.ARM_LOCATION_NAME) }}
+          ARM_LOCATION_NAME: ${{ vars.ARM_LOCATION_NAME }}
