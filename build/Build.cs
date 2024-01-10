@@ -67,9 +67,6 @@ class Build : NukeBuild
     #endregion
     #region Project config
 
-    [Parameter("ARM_USE_OIDC")]
-    readonly string ARM_USE_OIDC;
-
     [Parameter("PULUMI_ORGANIZATION")]
     readonly string PulumiOrganization;
 
@@ -105,31 +102,21 @@ class Build : NukeBuild
 
         string stackName = $"{PulumiOrganization}/{PulumiStackName}/{stackEnvironment}";
         Log.Warning($"PulumiToken: {PulumiAccessToken}");
-        Log.Warning($"ARM_USE_OIDC: {ARM_USE_OIDC}");
-        // Obtain necessary Azure authentication variables from your current environment
-        string armClientId = Environment.GetEnvironmentVariable("ARM_CLIENT_ID");
-        string armClientSecret = Environment.GetEnvironmentVariable("ARM_CLIENT_SECRET");
-        string armTenantId = Environment.GetEnvironmentVariable("ARM_TENANT_ID");
-        string armSubscriptionId = Environment.GetEnvironmentVariable("ARM_SUBSCRIPTION_ID");
-        bool useMsi = bool.Parse(Environment.GetEnvironmentVariable("ARM_USE_MSI") ?? "false");
-
-        Log.Warning($"ArmClientId: {armClientId}");
-
         var resp = PulumiTasks.PulumiUp(_ => _
-            .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken)
-            .SetProcessEnvironmentVariable("ARM_USE_OIDC", ARM_USE_OIDC)
+            //.SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken)
+            //.SetProcessEnvironmentVariable("ARM_USE_OIDC", ARM_USE_OIDC)
             .SetCwd(IaC_Root_Dir / PulumiStackName)
             .SetStack(stackName)
             .EnableSkipPreview()
                );
         
-        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder, stackName, PulumiAccessToken, ARM_USE_OIDC); // # iacProjectFolder == project folder name "job-application
-        var resourceGroupId = variableOutputs.Named("ResourceGroupId",msg=>Log.Warning(msg));
-        var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId", msg => Log.Warning(msg));
-        var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName", msg => Log.Warning(msg));
-        var resourceGroupName = variableOutputs.Named("ResourceGroupName", msg => Log.Warning(msg));
-        var storageAccountName = variableOutputs.Named("StorageAccountName", msg => Log.Warning(msg));
-        var storageAccountKey = variableOutputs.Named("StorageAccountKey", msg => Log.Warning(msg));
+        var variableOutputs = GetVariableOutput.FromStack(IaC_Root_Dir / iacProjectFolder, stackName); // # iacProjectFolder == project folder name "job-application
+        var resourceGroupId = variableOutputs.Named("ResourceGroupId");
+        var linuxFunctionAppId = variableOutputs.Named("LinuxFunctionAppId");
+        var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
+        var resourceGroupName = variableOutputs.Named("ResourceGroupName");
+        var storageAccountName = variableOutputs.Named("StorageAccountName");
+        var storageAccountKey = variableOutputs.Named("StorageAccountKey");
 
         return (new AzureFunctionConfig(AzureSubscriptionId, resourceGroupName, linuxFunctionAppName, AzureToken, storageAccountKey), new AzureStorageAccount(storageAccountName));
     }

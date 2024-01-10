@@ -13,25 +13,23 @@ public class GetVariableOutput
     readonly string _pulumiAccessToken;
     readonly string _ARM_USE_OIDC;
 
-    public static GetVariableOutput FromStack(AbsolutePath stack,string stackName, string pulumiAccessToken, string ARM_USE_OIDC) => new GetVariableOutput(stack,stackName, pulumiAccessToken, ARM_USE_OIDC);
+    public static GetVariableOutput FromStack(AbsolutePath stack,string stackName) => new GetVariableOutput(stack,stackName);
 
-    private GetVariableOutput(AbsolutePath stackPath,string stackName,string pulumiAccessToken, string ARM_USE_OIDC)
+    private GetVariableOutput(AbsolutePath stackPath,string stackName)
     {
         _stackPath = stackPath;
         _stackName = stackName;
-        _pulumiAccessToken = pulumiAccessToken ?? throw new System.ArgumentNullException();
-        _ARM_USE_OIDC = ARM_USE_OIDC;
     }
-    public string Named(string propName, Action<string> logger)
+    public string Named(string propName)
     {
-        logger($"StackPaht: {_stackPath}");
-        logger($"StackName: {_stackName}");
+        //logger($"StackPaht: {_stackPath}");
+        //logger($"StackName: {_stackName}");
         // #TODO: Figure out why this hack is necessary
         PulumiTasks.PulumiStackSelect(_=>_.SetCwd(_stackPath).SetStackName(_stackName));
 
         return PulumiTasks.PulumiStackOutput(_ => _
-            .SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",_pulumiAccessToken)
-            .SetProcessEnvironmentVariable("ARM_USE_OIDC", _ARM_USE_OIDC)
+            //.SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN",_pulumiAccessToken)
+            //.SetProcessEnvironmentVariable("ARM_USE_OIDC", _ARM_USE_OIDC)
             .SetCwd(_stackPath)
             .SetPropertyName(propName)
             .EnableShowSecrets()
