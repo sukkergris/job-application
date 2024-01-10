@@ -16,11 +16,8 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: |
-          echo ${{ vars.FOO }}
-          az webapp list --query "[?state=='Running']"
         env:
-          ACTIONS_RUNNER_DEBUG: true
+          ACTIONS_RUNNER_DEBUG: false
       - uses: jorelali/setup-elm@v5
         with:
           elm-version: 0.19.1
