@@ -39,4 +39,4 @@ jobs:
           PulumiOrganization: ${{ vars.PULUMI_ORGANIZATION }}
           ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS.clientId) }}
           ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS.tenantId) }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CERDENTIALS.subscriptionId) }}
+          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS.subscriptionId) }}
