@@ -17,7 +17,7 @@
 // "postStartCommand": "rootDir=$PWD; cd .. && user=$(whoami); sudo chown $user -Rf $rootDir && mygroup=$(id -gn); sudo chgrp $mygroup -Rf $rootDir && cd $rootDir",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// 8000 is the default port used for the `elm reactor` command
-	"forwardPorts": [8012],
+	"forwardPorts": [8012, 45059],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "elm make",

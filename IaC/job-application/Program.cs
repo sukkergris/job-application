@@ -2,7 +2,7 @@
 using Pulumi.Azure.AppService;
 using Pulumi.Azure.AppService.Inputs;
 using Pulumi.Azure.Core;
-using Pulumi.Azure.Network;
+using Pulumi.AzureAD;
 using System.Collections.Generic;
 
 return await Deployment.RunAsync(() =>
@@ -12,7 +12,7 @@ return await Deployment.RunAsync(() =>
     var application = "heisconform"; // heiselberg-contact-form
 
     // Stack specific configurations
-    var azureConfig = new Config("azure"); // Pulumi.{stack}.yaml
+    var azureConfig = new Pulumi.Config("azure"); // Pulumi.{stack}.yaml
     var azLocation = azureConfig.Require("location");
     var environment = Deployment.Instance.StackName;
 

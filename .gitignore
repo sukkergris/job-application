@@ -415,3 +415,6 @@ FodyWeavers.xsd
 # elm-repl generated files
 repl-temp-*
 /Testing/Build.Test/integrationtest.json
+
+# elm compiled files
+src/Frontend-elm/wwwroot/elm.js

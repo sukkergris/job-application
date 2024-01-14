@@ -12,5 +12,6 @@
   "author": "Theodor A. H. Heiselberg",
   "license": "ISC",
   "devDependencies": {
+    "elm-watch": "^1.1.2"
   }
 }

@@ -1,3 +1,4 @@
 {
     "liveServer.settings.root": "/wwwroot"
+    , "liveServer.settings.port": 8012
 }
