@@ -73,7 +73,7 @@ public class AzureStaticWebsiteDeployment
     /// <returns></returns>
     private async Task CreateOrOverwrite(AbsolutePath filePath, BlobName blobName)
     {
-        var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/html" };
+        var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/html", CacheControl = "no-store" };
         BlobRequestConditions overwrite = null;
         var blobClient = _webBlobContainerClient.GetBlobClient(blobName.name);
         var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
