@@ -14,5 +14,3 @@ PS C:\private\private-job-application-app> code .\src\Frontend-elm\
 This will open vs code.
 
 Now start the devcontainer.
-
-

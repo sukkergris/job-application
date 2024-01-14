@@ -4,14 +4,14 @@ permissions:
   id-token: write
   contents: read
 
-on:
-  workflow_dispatch:
-
 #on:
-#  push:
-#    branches:
-#      - main
-#
+#  workflow_dispatch:
+
+on:
+  push:
+    branches:
+      - main
+
 
 jobs:
   ubuntu-latest:
