@@ -128,7 +128,8 @@ class Build : NukeBuild
         SourceCodeDir.GlobDirectories("**/bin", "**/obj").DeleteDirectories();
 
         //AbsolutePath.CreateOrCleanDirectory(ArtifactsDir); // #TODO: FIX - But I just cant find that namespace :/
-
+        //Log.Information($"Cleaning node_moduels:{IaC_Root_Dir / PulumiStackName / "node_modules"}");
+        //EnsureCleanDirectory(IaC_Root_Dir / PulumiStackName / "node_modules");
         EnsureCleanDirectory(ArtifactsDir);
     }
     #endregion

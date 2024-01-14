@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Bot.Builder.LanguageGeneration;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace _build;
 
@@ -54,11 +55,13 @@ public class AzureStaticWebsiteDeployment
 
         foreach (var blob in blobsToDelete)
         {
+            Log.Debug($"Deleting blob: {blob.Name}");
             await _webBlobContainerClient.DeleteBlobIfExistsAsync(blob.Name);
         }
 
         foreach (var (blob,file) in localFrontendFiles.Where( pair => !pair.Key.name.Contains("_doc_")))
         {
+            Log.Debug($"Create or overwrite blob: {blob.name} found here: {file.path}");
             await CreateOrOverwrite(file.path, blob);
         }
 
