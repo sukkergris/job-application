@@ -10,7 +10,8 @@
 
 <body>
   <div class="content"></div>
-  <script src="elm.js"></script>
+  <!--#todo: Fix cache busting by making the version update with each deploy-->
+  <script src="elm.js?v=2.0"></script>
   <script>
     Elm.Main.init({node: document.querySelector('.content')});
   </script>

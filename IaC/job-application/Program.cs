@@ -77,7 +77,7 @@ return await Deployment.RunAsync(() =>
         Sku = new Pulumi.AzureNative.Cdn.Inputs.SkuArgs
         {
             Name = "Standard_Microsoft" // https://www.pulumi.com/registry/packages/azure-native/api-docs/cdn/profile/#sku
-        }
+        },
     });
 
     return new Dictionary<string, object?>
