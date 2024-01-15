@@ -6,6 +6,7 @@
 *** Docker
 *** [[https://code.visualstudio.com/docs/devcontainers/containers devcontainers]]
 *** [[https://github.com/nektos/act act - github workflows locally]]
+*** [[https://github.com/coreybutler/nvm-windows/releases nvm-windows]] **(tested with v. 21.5.0)**
 ** Services
 *** IaC
 **** [[https://www.pulumi.com/ Pulumi]]
