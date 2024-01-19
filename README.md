@@ -35,7 +35,7 @@ Copy the subscription ID and send it to your developer.
 
 ### Add User to Subscription
 
-Now go to [Microsoft extra - (Active Directory)](https://entra.microsoft.com) and add your developers user to your new subscription. The dev needs to be `owner` in order to provission the infrastructure
+Now go to [Microsoft extra - (Active Directory)](https://entra.microsoft.com) and add your developers user to your new subscription. The dev needs to be `owner` in order to provision the infrastructure
 
 ### Setup using custom domain name
 
@@ -60,21 +60,21 @@ You will need the payed version in order to use organizations. It's cheep though
 6. Acquire your [Personal access token](https://app.pulumi.com/sukkergris/settings/tokens)
 7. COPY AND STORE THIS TOKEN SECURELY
 
-## Setting up emal sending smtp (1 hour)
+## Setting up email sending smtp (1 hour)
 
 This solution is hardcoded to use ssl.
 
-I used zoho mail for this taks but both gmail and outlook should suffice.
+I used zoho mail for this takes but both gmail and outlook should suffice.
 
 1. Add your mail's user name to github action secrets. Environment variable: MAIL_USER_NAME
 2. Add your mail's password to github action secrets. Environment variable: MAIL_PW
-3. Add your mail's hostname to gihub action secrets. Environment variable: MAIL_HOST
+3. Add your mail's hostname to github action secrets. Environment variable: MAIL_HOST
 4. Add your mail's port to github action secrets. Environment variable: MAIL_HOST_PORT
 
 ## Setting up CLOUDFLARE (1 hour)
 
  1. Validate domain ownership for mail supplier
- 2. Validate domain ownership for azure (Custum domanin)
+ 2. Validate domain ownership for azure (Custom domain)
  3. Add dns records
  4. Add page redirect rule
 
@@ -86,13 +86,13 @@ In order to login to azure when running an github action. A service principle is
 
 **In the console use the following commands:**
 
-## Create SP using OIDC (Recomended)
+## Create SP using OIDC (Recommended)
 
 [Link](/Documentation/_doc_Azure_OIDC_GitHub_Actions.md)
 
 ## Create SP and Secrets using hardcoded values (or see next step for using env)
 
-(_This is more sutable for local development_)
+(_This is more suitable for local development_)
 
 Learn: [Azure RBAC](https://www.youtube.com/watch?v=1OBi93apLdo)
 
