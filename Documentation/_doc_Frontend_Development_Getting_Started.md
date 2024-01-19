@@ -1,7 +1,7 @@
 
 # Getting started
 
-Let's get you started developiong the fronted!
+Let's get you started developing the fronted!
 
 ## Programs
 

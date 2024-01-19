@@ -68,14 +68,21 @@ public class TestHelperFuntion
 	[Fact]
 	public void GetBlobHeadersFromAbsolutePaht()
 	{
-		OneOf.OneOf<Error, UnSupportedFileType, Azure.Storage.Blobs.Models.BlobHttpHeaders> html = AzureStaticWebsiteDeployment.GetBlobHttpHeadersFrom("C:\\private\\private-job-application-app\\src\\AzureStaticWebsite\\index.htmsl");
+		OneOf.OneOf<Error, UnSupportedFileType, Azure.Storage.Blobs.Models.BlobHttpHeaders> html = AzureStaticWebsiteDeployment.GetBlobHttpHeadersFrom("C:\\private\\private-job-application-app\\src\\AzureStaticWebsite\\index.html");
 		html.Switch(
 						error => Assert.Fail("Should not be an error"),
 						unsupportedFileType => Assert.Fail("Should not be an unsupported file type"),
-						blobHttpHeaders => { 
+						blobHttpHeaders =>
+						{
 							Console.WriteLine(blobHttpHeaders.ContentType);
 							Assert.Equal("text/html", blobHttpHeaders.ContentType);
 						});
 
+	}
+	[Fact]
+	public void ListFilesOnFolderDrive()
+	{
+		var start = "c:\\code\\job-application\\src\\Frontend-elm\\wwwroot";
+		var dimmer = AzureStaticWebsiteDeployment.GetFileNames(start,start,new Dictionary<BlobName,_build.File>() );
 	}
 }

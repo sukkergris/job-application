@@ -104,35 +104,29 @@ public class AzureStaticWebsiteDeployment
 	/// </summary>
 	/// <param name="root"></param>
 	/// <param name="path"></param>
-	/// <param name="files">Key: Blobname, Value: Absolute file path</param>
+	/// <param name="existingFiles">Key: Blobname, Value: Absolute file path</param>
 	/// <returns>Key: Blobname, Value: Absolute file path</returns>
-	public static IReadOnlyDictionary<BlobName, File> GetFileNames(AbsolutePath root, AbsolutePath path, IReadOnlyDictionary<BlobName, File> files)
+	public static IReadOnlyDictionary<BlobName, File> GetFileNames(AbsolutePath root, AbsolutePath path, IReadOnlyDictionary<BlobName, File> existingFiles)
 	{
-		// Create starting point for this iteration. Adding preveiously found files to the list.
-		Dictionary<BlobName, File> filesInDirs = new Dictionary<BlobName, File>(files);
 
-		// Now diving into every folder found in this 'path'
-		foreach (var dir in Directory.GetDirectories(path))
-		{
-			// Finding files in assending folder
-			IReadOnlyDictionary<BlobName, File> filesInDir = GetFileNames(root, dir, filesInDirs);
+		var directlyAscendingFolders = Directory.GetDirectories(path);
+		// Adding files found in the directly ascending folders
+		var filesInDirectlyAscendingFolders = directlyAscendingFolders
+			 .SelectMany(dir => GetFileNames(root, dir, existingFiles))
+			 .ToDictionary(x => x.Key, x => x.Value);
 
-			foreach (var file in filesInDir)
-			{
-				filesInDirs.Add(file.Key, file.Value);
-			}
-		}
-
-		// Finally adding files found in the current 'path'
+		// Adding files found in the current path
 		var filesInPath = Directory.GetFiles(path)
-			 .Select(path => new KeyValuePair<BlobName, File>(new BlobName(FilePathToBlobName(root, path)), new File(path)));
+			 .Select(filePath => new KeyValuePair<BlobName, File>(new BlobName(FilePathToBlobName(root, filePath)), new File(filePath)))
+			 .ToDictionary(x => x.Key, x => x.Value);
 
-		foreach (var file in filesInPath)
-		{
-			filesInDirs.Add(file.Key, file.Value);
-		}
+		// Merging dictionaries
+		var mergedFiles = existingFiles
+			 .Concat(filesInPath)
+			 .Concat(filesInDirectlyAscendingFolders)
+			 .ToDictionary(x => x.Key, x => x.Value);
 
-		return filesInDirs;
+		return mergedFiles;
 	}
 
 	// Since the path contains the absolute value of the file path (eg. c://hello/world.txt) we must remove some part before exposing the files found in wwwroot.
@@ -152,7 +146,7 @@ public class AzureStaticWebsiteDeployment
 			{
 				"html" => CreateBlobHttpHeaders("text/html", "no-store"),
 				"css" => CreateBlobHttpHeaders("text/css", $"max-age={24 * 60 * 60}"),
-				"js" =>CreateBlobHttpHeaders("text/javascript", $"max-age={24 * 60 * 60}"),
+				"js" => CreateBlobHttpHeaders("text/javascript", $"max-age={24 * 60 * 60}"),
 				"png" => CreateBlobHttpHeaders("image/png", $"max-age={24 * 60 * 60}"),
 				"ico" => CreateBlobHttpHeaders("image/x-icon", $"max-age={24 * 60 * 60}"),
 				"svg" => CreateBlobHttpHeaders("image/svg+xml", $"max-age={24 * 60 * 60}"),
