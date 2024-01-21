@@ -50,8 +50,8 @@ public class AzureStaticWebsiteDeployment
 	{
 		var blobsInAzure = _webBlobContainerClient.GetBlobs()
 			 .ToList();
-		var startingPoint = new Dictionary<BlobName, File>();
-		var localFrontendFiles = GetFileNames(root: frontendFilesPath, path: frontendFilesPath, startingPoint);
+
+		var localFrontendFiles = GetFileNames(root: frontendFilesPath, path: frontendFilesPath);
 
 		var blobsToDelete = blobsInAzure.Where(blob => !localFrontendFiles.Any(pair => string.Equals(pair.Key.name.NormalizePath(), blob.Name.NormalizePath(), StringComparison.OrdinalIgnoreCase)))
 			 .ToList();
@@ -106,13 +106,13 @@ public class AzureStaticWebsiteDeployment
 	/// <param name="path"></param>
 	/// <param name="existingFiles">Key: Blobname, Value: Absolute file path</param>
 	/// <returns>Key: Blobname, Value: Absolute file path</returns>
-	public static IReadOnlyDictionary<BlobName, File> GetFileNames(AbsolutePath root, AbsolutePath path, IReadOnlyDictionary<BlobName, File> existingFiles)
+	public static IReadOnlyDictionary<BlobName, File> GetFileNames(AbsolutePath root, AbsolutePath path)
 	{
 
 		var directlyAscendingFolders = Directory.GetDirectories(path);
 		// Adding files found in the directly ascending folders
 		var filesInDirectlyAscendingFolders = directlyAscendingFolders
-			 .SelectMany(dir => GetFileNames(root, dir, existingFiles))
+			 .SelectMany(dir => GetFileNames(root, dir))
 			 .ToDictionary(x => x.Key, x => x.Value);
 
 		// Adding files found in the current path
@@ -121,10 +121,7 @@ public class AzureStaticWebsiteDeployment
 			 .ToDictionary(x => x.Key, x => x.Value);
 
 		// Merging dictionaries
-		var mergedFiles = existingFiles
-			 .Concat(filesInPath)
-			 .Concat(filesInDirectlyAscendingFolders)
-			 .ToDictionary(x => x.Key, x => x.Value);
+		var mergedFiles = filesInPath.Concat(filesInDirectlyAscendingFolders).ToDictionary(x => x.Key, x => x.Value);
 
 		return mergedFiles;
 	}

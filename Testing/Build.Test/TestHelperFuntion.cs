@@ -83,6 +83,6 @@ public class TestHelperFuntion
 	public void ListFilesOnFolderDrive()
 	{
 		var start = "c:\\code\\job-application\\src\\Frontend-elm\\wwwroot";
-		var dimmer = AzureStaticWebsiteDeployment.GetFileNames(start,start,new Dictionary<BlobName,_build.File>() );
+		var dimmer = AzureStaticWebsiteDeployment.GetFileNames(start,start);
 	}
 }
