@@ -6,6 +6,8 @@ import Element.Background
 import Html exposing (Html)
 import List exposing (head)
 import Browser exposing (element)
+import Element exposing (Element)
+import Element exposing (paddingXY)
 
 main : Html msg
 main = viewLayout
@@ -15,7 +17,18 @@ fontNunitoRegular = Element.Font.family [Element.Font.typeface "NunitoRegular"]
 
 fontWinterDrink : Element.Attribute msg
 fontWinterDrink = Element.Font.family [Element.Font.typeface "WinterDrink"]
-colors : { background : Element.Color, logoBackground : Element.Color }
+
+themeLight = {
+    primary = Element.rgb255 0x1E 0x65 0x86
+    , primaryLight = Element.rgb255 0xEA 0xDD 0xFFF
+    , primaryDark = Element.rgb255 0xC5 0xe7 0xff
+    , secondary = Element.rgb255 0x4E 0x61 0x6D
+    , secondaryLight = Element.rgb255 0xf6 0xfa 0xfe
+    , secondaryDark = Element.rgb255 0xd1 0xe5 0xf4
+    , textOnPrimary = Element.rgb255 0xff 0xff 0xff
+    , textOnSecondary = Element.rgb255 0xff 0xff 0xff
+ }
+
 colors = {
     background = Element.rgb255 255 0 0
     , logoBackground = Element.rgb255 1 47 73
@@ -35,20 +48,20 @@ viewLayout =
         options = []
     }
     []
-    ( Element.column [Element.centerX] [
+    ( Element.column [Element.centerX, Element.Background.color themeLight.primary ] [
         topBanner
         , headlineParagrph
         , profileImage
         , contentParagaraph
+        , (buildingTheSiteParagraph rant themeLight.textOnPrimary)
         , endParagraph
         , footer
     ])
 
 textParagraph : String -> Element.Element msg
-textParagraph txt = Element.paragraph [fontNunitoRegular, Element.paddingXY 22 22] [Element.text txt]
+textParagraph txt = Element.paragraph [fontNunitoRegular, Element.paddingXY 22 22, Element.Font.color themeLight.textOnPrimary] [Element.text txt]
 
-textEndParagaph : String -> Element.Element msg
-textEndParagaph txt = Element.paragraph [fontNunitoRegular, Element.paddingEach { top=22, right=22, bottom=0, left=22 }] [Element.text txt]
+textEndParagaph txt fontColor = Element.paragraph [fontNunitoRegular, Element.Font.color fontColor, Element.paddingEach { top = 22, right = 22, bottom = 0, left = 22 }] [Element.text txt]
 headlineParagrph : Element.Element msg
 headlineParagrph = textParagraph headlineTxt
 
@@ -61,10 +74,15 @@ contentParagaraph = textParagraph contentTxt
 contentTxt : String
 contentTxt = "Lidt om mig"
 
+buildingTheSiteParagraph txt fontColor = Element.paragraph [fontNunitoRegular, Element.Font.color fontColor, paddingXY 22 22] [Element.text txt]
+
 endParagraph : Element.Element msg
-endParagraph = textEndParagaph "..."
+endParagraph = textEndParagaph "..." themeLight.textOnPrimary
 
 technologiesParagraph : Element.Element msg
 technologiesParagraph = textParagraph ".NET, EF Core, SQL, WPF, Blazor, Maui, GitHub Actions"
 footer : Element.Element msg
-footer =  Element.paragraph [ fontWinterDrink, Element.paddingEach { top = 22, right = 22, bottom = 0, left = 22 }, Element.centerX ] [Element.text ".NET Udvikler - Theodor Heiselberg" ]
+footer =  Element.paragraph [ fontWinterDrink,Element.Font.color themeLight.textOnPrimary, Element.paddingEach { top = 22, right = 22, bottom = 10, left = 22 }, Element.centerX ] [Element.text ".NET Udvikler - Theodor Heiselberg" ]
+
+rant : String
+rant = "Så kom turen til design. Lige nu er det Material Design der leges med :)"
