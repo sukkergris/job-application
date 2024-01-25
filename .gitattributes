@@ -1,0 +1,10 @@
+# * text=auto // If used you will need a file ingnore list
+
+*.md text
+*.json text
+*.txt text
+*.html text
+*.elm text
+*.cs text
+*.ps1 text
+.gitignore text
