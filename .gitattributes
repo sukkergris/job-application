@@ -8,12 +8,13 @@
 *.html text
 *.elm text
 *.cs text
-*.ps1 text
 .gitignore text
 *.Dockerfile text
 *.env text
 *.yml text
+*.sh text
 
+*.ps1 binary
 *.ico binary
 *.jpg binary
 *.png binary
