@@ -1,4 +1,6 @@
-# * text=auto // If used you will need a file ingnore list
+* text=auto
+
+*.sln text eol=crlf
 
 *.md text
 *.json text
@@ -8,3 +10,17 @@
 *.cs text
 *.ps1 text
 .gitignore text
+*.Dockerfile text
+*.env text
+*.yml text
+
+*.ico binary
+*.jpg binary
+*.png binary
+*.gif binary
+*.pdf binary
+*.zip binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.otf binary
