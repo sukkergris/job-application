@@ -1,3 +1,4 @@
+# Set default behavior to automatically normalize line endings
 * text=auto
 
 *.md text
@@ -10,9 +11,10 @@
 *.Dockerfile text
 *.env text
 *.yml text
-*.sh text
+# Force bash scripts to always use LF line endings so that if a repo is accessed
+# in Unix via a file share from Windows, the scripts will work
+*.sh text eol=lf
 
-*.ps1 binary
 *.ico binary
 *.jpg binary
 *.png binary
@@ -26,4 +28,6 @@
 *.svg binary
 
 *.sln text eol=crlf
-*.bat eol=crlf
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
+*.{ics,[iI][cC][sS]} text eol=crlf*.bat eol=crlf
