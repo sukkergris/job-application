@@ -6,5 +6,6 @@
             ],
             "output": "wwwroot/elm.js"
         }
-    }
+    },
+    "serve": "wwwroot"
 }

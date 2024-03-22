@@ -10,7 +10,7 @@ import Element.Font
 
 toggleThemeBtn : Theme -> Element.Element Msg
 toggleThemeBtn theme =
-    Element.Input.button 
+    Element.Input.button
     [
         Element.Background.color theme.primaryDark
         , Element.Border.rounded 8
@@ -18,7 +18,7 @@ toggleThemeBtn theme =
         , Element.alignRight
         , Element.paddingEach {top = 12, right = 12, bottom = 9, left = 12}
         , Element.Font.bold
-        , Element.mouseOver 
+        , Element.mouseOver
             [Element.Background.color theme.primary]
     ]
     {

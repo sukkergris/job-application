@@ -1,7 +1,5 @@
 # Create New Stack
 
-Before starting the `Dev Container`: [Prepare the environment](Use-The-Dev-Container.md)
-
 ## Fix arrow keys not responding
 
 [Fix arrow keys not working in devenvironment] -> `#: tput rmkx`

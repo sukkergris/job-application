@@ -17,15 +17,17 @@ First buy your domain name. Eg. at [GoDaddy](https://dk.godaddy.com/domains) or 
 
 ## Create accounts
 
+You need the following accounts:
+
 1. [Azure](https://portal.azure.com/)
-2. [Pulumi](https://pulumi.com)
-3. [mailchimp](https://mailchimp.com/)
+2. [GitHub](https://github.com/)
+3. [Pulumi](https://pulumi.com)
 4. [Cloudflare](https://dash.cloudflare.com/)
-5. [GitHub](https://github.com/)
+# TODO: 5. [mailchimp](https://mailchimp.com/)
 
 ## Setting up Azure (1 hour)
 
-### Add Subscription
+### Add Subscription (Flow validated 2024-03-22)
 
 If you have an existing subscription it's possible to use that one. **This is NOT recomended!**
 
@@ -33,7 +35,9 @@ After creating your azure account go to the [`Subscriptions` (Portal)](https://p
 
 Copy the subscription ID and send it to your developer.
 
-### Add User to Subscription
+### Add User to Subscription (Needs revision)
+
+# TODO: Describe flow!
 
 Now go to [Microsoft extra - (Active Directory)](https://entra.microsoft.com) and add your developers user to your new subscription. The dev needs to be `owner` in order to provision the infrastructure
 
@@ -62,7 +66,7 @@ You will need the payed version in order to use organizations. It's cheep though
 
 ## Setting up email sending smtp (1 hour)
 
-This solution is hardcoded to use ssl.
+This solution is hardcoded to only use ssl.
 
 I used zoho mail for this takes but both gmail and outlook should suffice.
 

@@ -1,11 +1,13 @@
 {
     "cSpell.words": [
+        "devcontainer",
         "dockerhub",
         "heisconform",
         "heiselberg",
         "isuperman",
         "mailchimp",
         "northeurope",
+        "OIDC",
         "plantuml",
         "Pulumi",
         "Serilog",
@@ -13,8 +15,8 @@
     ],
     "rest-client.environmentVariables": {
         "$shared": {},
-        "local":{
-            "test":"xyz"
+        "local": {
+            "test": "xyz"
         }
     }
 }

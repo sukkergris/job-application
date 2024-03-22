@@ -2,7 +2,9 @@
 	"name": "Elm for the 'job-application'",
 	"dockerFile": "Dockerfile",
 	// In order to make elm-watch pick up changes
-	"containerEnv": { "CHOKIDAR_USEPOLLING": "true"},
+	"containerEnv": {
+		"CHOKIDAR_USEPOLLING": "true"
+	},
 	// Configure tool-specific properties.
 	"customizations": {
 		// Configure properties specific to VS Code.
@@ -14,18 +16,17 @@
 			]
 		}
 	},
-// "postStartCommand": "rootDir=$PWD; cd .. && user=$(whoami); sudo chown $user -Rf $rootDir && mygroup=$(id -gn); sudo chgrp $mygroup -Rf $rootDir && cd $rootDir",
+	// "postStartCommand": "rootDir=$PWD; cd .. && user=$(whoami); sudo chown $user -Rf $rootDir && mygroup=$(id -gn); sudo chgrp $mygroup -Rf $rootDir && cd $rootDir",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// 8000 is the default port used for the `elm reactor` command
-	"forwardPorts": [8012, 45059],
-
+	"forwardPorts": [
+		8012
+	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "elm make",
-
 	// Comment out to connect as root instead. In that case you may need to change the mounts
 	// configuration too. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "node",
-
 	// Keeping the elm dependency cache mounted in a volume is both a small performance benefit
 	// when having rebuilt your container. It also solves a problem with the Elm Language Server.
 	// The Elm Language Server uses the dependency cache stored at ~/.elm.
@@ -40,8 +41,8 @@
 	// redownload dependencies.
 	// Adding this volume will preserve the elm cache between rebuilds though, fixing this issue
 	"mounts": [
-		"source=vscode-devcontainer-2-elm-dependency-cache,target=/home/node/.elm,type=volume"
-	]
-	, "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind"
-	, "workspaceFolder": "/workspace"
+		"source=job-application-elm-dependency-cache,target=/home/node/.elm,type=volume"
+	],
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+	"workspaceFolder": "/workspace"
 }
