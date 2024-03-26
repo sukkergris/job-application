@@ -70,7 +70,8 @@ return await Deployment.RunAsync(() =>
         IndexDocument = "index.html"
     });
 
-    var cdnProfile = new Pulumi.AzureNative.Cdn.Profile($"{application}-",new Pulumi.AzureNative.Cdn.ProfileArgs {
+    var cdnProfile = new Pulumi.AzureNative.Cdn.Profile($"{application}-", new Pulumi.AzureNative.Cdn.ProfileArgs
+    {
         Location = resourceGroup.Location,
         ProfileName = $"cdn-heis-sw",
         ResourceGroupName = resourceGroup.Name,
@@ -91,3 +92,4 @@ return await Deployment.RunAsync(() =>
         ["StorageAccountDefaultEndpoint"] = storageAccount.PrimaryWebEndpoint
     };
 });
+
