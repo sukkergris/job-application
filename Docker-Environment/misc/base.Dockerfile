@@ -1,27 +1,29 @@
 # Start with a minimal Debian image
 FROM debian:bullseye AS base
-
+# Create the node user
+RUN groupadd --gid 1000 node \
+    && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 # Install essential tools and dependencies
 RUN apt-get update -y && \
     apt-get install -y \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        software-properties-common \
-        git \
-        zsh \
-        jq \
-        unzip \
-        make \
-        tree \
-        build-essential \
-        wget \
-        # Other tools as needed \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    git \
+    zsh \
+    jq \
+    unzip \
+    make \
+    tree \
+    build-essential \
+    wget \
+    # Other tools as needed \
     && rm -rf /var/lib/apt/lists/*
 
 # Install gh
 RUN curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-  -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+    -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 
 RUN chmod 644 /usr/share/keyrings/githubcli-archive-keyring.gpg
 

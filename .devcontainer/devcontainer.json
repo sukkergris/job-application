@@ -1,31 +1,34 @@
 {
-    "name": "job-application",
-    "build":{
-        "dockerfile": "dev.Dockerfile"},
-    "remoteEnv": {
-      "PATH": "${containerEnv:PATH}:~/.dotnet/tools:/root/.pulumi/bin"
-    },
-    "runArgs": [
-        "--env-file",
-        ".devcontainer/secrets.env"
-	],
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"GitHub.copilot",
-				"virgilsisoe.nuke-tools",
-				"ms-dotnettools.csdevkit",
-				"humao.rest-client",
-				"ms-dotnettools.vscode-dotnet-runtime",
-				"streetsidesoftware.code-spell-checker"
-			]
-		}
-	},
-	"forwardPorts": [8012, 45059],
-	"remoteUser": "node",
-	"mounts": [
-		"source=job-application-with-elm-cache,target=/home/node/.elm,type=volume"
-	]
-	, "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind"
-	, "workspaceFolder": "/workspace"
+  "name": "job-application-development",
+  "build": {
+    "dockerfile": "dev.Dockerfile"
+  },
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/root/.pulumi/bin:/home/node/.dotnet/tools"
+  },
+  "runArgs": [
+    "--env-file",
+    ".devcontainer/secrets.env"
+  ],
+  "remoteUser": "node",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "dotnet.sdk": "6.0"
+      },
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "jebbs.plantuml",
+        "k--kato.docomment",
+        "EditorConfig.EditorConfig",
+        "ms-dotnettools.csdevkit",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  },
+  "mounts": [
+    "source=job-application-development-cache,target=/home/node/.elm,type=volume"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace"
 }
