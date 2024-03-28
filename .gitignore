@@ -419,3 +419,4 @@ repl-temp-*
 # elm compiled files
 src/Frontend-elm/wwwroot/elm.js
 IaC/.mono/registry/CurrentUser/software/microsoft/csdevkit/telemetry/persistentpropertybag/microsoft.visualstudio.code.servicehost/values.xml
+/src/Heiselberg.Mails/Properties
