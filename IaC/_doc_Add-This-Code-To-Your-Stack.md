@@ -4,14 +4,15 @@
 ## Logging in to azure cli
 
 `terminal $` `az login`
+`terminal $` `az account show` if set to desired subscription no need to continue her :)
 `terminal $` `az account list`
 `terminal $` `az account subscription list`
-`terminal $` `az set --subscription=YOUR-SUBSCRIPTION-ID`
+`terminal $` `az account set --subscription=YOUR-SUBSCRIPTION-ID`
 
 Or make the usage of a specific subscription permanent for this project.
 You need to create the stack first (See 'Assimilating the stack')
 
-`terminal $` `pulumi config set azure-native:subscriptionId YOUR-SUBSCRIPTION-ID`
+`$ pulumi config set azure-native:subscriptionId YOUR-SUBSCRIPTION-ID`
 
 Or add it to the `pulumi.env` file
 PULUMI_ACCESS_TOKEN=YOUR-PULUMI-ACCESS-TOKEN

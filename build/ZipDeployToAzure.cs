@@ -27,8 +27,6 @@ public class MyAzureFunction
     readonly AbsolutePath _artifactPath;
     public async Task ToAzureFunction(AzureFunctionConfig config)
     {
-
-
         var publishingCredentials = await GetCredentials(config);
 
         await Publish(config, publishingCredentials);

@@ -90,7 +90,6 @@
           "items": {
             "type": "string",
             "enum": [
-              "AndBuildFrontend",
               "AndCompile",
               "AndDeploy",
               "AndRestore",
@@ -112,7 +111,6 @@
           "items": {
             "type": "string",
             "enum": [
-              "AndBuildFrontend",
               "AndCompile",
               "AndDeploy",
               "AndRestore",

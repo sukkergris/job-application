@@ -7,7 +7,7 @@ RUN apt-get update -y
 ARG ELM_VERSION=latest-0.19.1
 ARG ELM_TEST_VERSION=latest-0.19.1
 ARG ELM_FORMAT_VERSION=latest-0.19.1
-
+ARG ELM_WATCH_VERSION=beta
 # This Dockerfile adds a non-root user with sudo access. Update the “remoteUser” property in
 # devcontainer.json to use it. More info: https://aka.ms/vscode-remote/containers/non-root-user.
 ARG USERNAME=node
@@ -20,6 +20,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     elm@${ELM_VERSION} \
     elm-test@${ELM_TEST_VERSION} \
     elm-format@${ELM_FORMAT_VERSION} \
+    elm-watch@${ELM_WATCH_VERSION} \
     git \
     #
     # [Optional] Update UID/GID if needed
