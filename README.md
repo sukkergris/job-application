@@ -41,7 +41,11 @@ Copy the subscription ID and send it to your developer.
 
 Now go to [Microsoft extra - (Active Directory)](https://entra.microsoft.com) and add your developers user to your new subscription. The dev needs to be `owner` in order to provision the infrastructure
 
-### Setup using custom domain name
+### Setup using custom domain name (and https)
+
+[Using cloudflare and azure CDN](/Documentation/_doc_Azure_Static_Website.md)
+
+_The documentation below is temporary and insufficient_
 
 1. storage-account => Networking => Custom domain => www.YOUR_DOMAIN_NAME.TLD // Eg. www.young-heiselberg.com
 2. Front Door and CDN => Host name (YOUR_DOMAIN_NAME.azureedge.net) => + Endpoint
