@@ -2,6 +2,7 @@
 /out/
 **/*.secret
 **/secrets.env
+**/pulumi.env
 ## Ignore /build/Porperties/launchSettings.json
 ## Each dev must chose and setup how to debug in hes/hers prefered environment
 
