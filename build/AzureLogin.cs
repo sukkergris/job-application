@@ -20,7 +20,6 @@ namespace _build
                 Assert.Fail("Azure token not acquired");
             }
             Log.Debug("Azure token acquired");
-            //Log.Debug($"Logged in as:{}");
             return azAccessToken;
         }
     }

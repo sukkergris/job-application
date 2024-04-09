@@ -17,9 +17,9 @@ Works with eg. Azure resources.
 
 [Link to Azure app registrations](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade)
 
-1. Add or create an app registration (Service Principal - SP)
-2. Select the SP and go to the phane `Certificates & secets`
-3. Go to the phane `Federated credentials (n)`
+1. Add or create an app registration (Service Principal - SP) -> Home > App registrations > +New registration
+2. Select the SP and go to the tab `Certificates & secets`
+3. Go to the tab `Federated credentials (n)`
 4. Add a credential for the scenario `GitHub Actions deployning Azure resources`
 5. To the `.github/workflows/YOUR_FLOW_NAME.yml` add permission: `id-token: write`
 6. In the appropiate step add with:
@@ -40,7 +40,7 @@ Press [Select]
 
 ### Add Role
 
-Back on the `Add role assignment` seletc the `Role` phane:
+Back on the `Add role assignment` select the `Role` tab:
 
 Select `Privileged administrator roles`
 
@@ -50,4 +50,4 @@ Select `Privileged administrator roles`
 
 ### Finalize
 
-Back on the `Add role assignmen` press [next]
+Back on the `Add role assignment` press [next]

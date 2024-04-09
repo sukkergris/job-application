@@ -86,17 +86,22 @@ I used zoho mail for this takes but both gmail and outlook should suffice.
 
 ## Setting up GitHub (1 hour)
 
-In order to login to azure when running an github action. A service principle is created.
+In order to login to azure when running an github action. A service principle is created and OIDC is setup.
 
 **In the console use the following commands:**
 
-## Create SP using OIDC (Recommended)
+## Create a SP (Service Principal) an setup OIDC (Recommended)
 
-[Link](/Documentation/_doc_Azure_OIDC_GitHub_Actions.md)
+[How to add a SP and setup OIDC](/Documentation/_doc_Azure_OIDC_GitHub_Actions.md)
 
-## Create SP and Secrets using hardcoded values (or see next step for using env)
+## Create SP and setup RBAC (Using secrets)
 
-(_This is more suitable for local development_)
+This solution is using secrets - hardcoded values (or see next step for using env)
+
+__Remember that RBAC access will expire after a year__
+
+_This is more suitable for local development_ and only if you really want to avoid logging in manually.
+However RBAC __CAN__ be used by the github action for accessing azure. (But go for OIDC)
 
 Learn: [Azure RBAC](https://www.youtube.com/watch?v=1OBi93apLdo)
 
@@ -105,7 +110,7 @@ Learn: [Azure RBAC](https://www.youtube.com/watch?v=1OBi93apLdo)
 3. Run: `az ad sp create-for-rbac --name "YOUR_NEW_SERVICE_PRINCIPAL_NAME" --role contributor --scope /subscriptions/YOUR_SUBSCRIPTION_ID_HERE --sdk-auth`
 4. Copy the json output
 
-## Create SP using Env Variables
+## Create SP with RBAC setup - using Env Variables
 
 1. Read `.devcontainer/secrets.env` into the session
 2. Run: `read-env-var-from.secrets.env.ps1`
@@ -113,7 +118,7 @@ Learn: [Azure RBAC](https://www.youtube.com/watch?v=1OBi93apLdo)
 4. Run: `az ad sp create-for-rbac --name "YOUR_NEW_SERVICE_PRINCIPAL_NAME" --role contributor --scope /subscriptions/$Env:AZURE_SUBSCRIPTION_ID --sdk-auth`
 5. Copy the json output
 
-## Apply SP (Service principal)
+**Save the RBAC json secret**
 
 1. Copy the json output.
 2. Go to [Actions secrets and variables](https://github.com/sukkergris/job-application/settings/secrets/actions)
@@ -130,6 +135,7 @@ This template/project is meant to run in a devcontainer.
 
 1. In `.devcontainer` add a file named `secrets.env`
 2. Add these lines
-
+```secrets.env
 * PULUMI_ACCESS_TOKEN=YOUR_PULUMI_TOKEN_HERE
 * AZURE_SUBSCRIPTION_ID=YOUR_SELECTED_AZURE_SUBSCRIPTION_HERE
+```

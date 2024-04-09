@@ -25,7 +25,7 @@ public class MyAzureFunction
         _artifactPath = artifactPath;
     }
     readonly AbsolutePath _artifactPath;
-    public async Task ToAzureFunction(AzureFunctionConfig config)
+    public async Task ToAzureFunctions(AzureFunctionConfig config)
     {
         var publishingCredentials = await GetCredentials(config);
 
@@ -54,7 +54,6 @@ public class MyAzureFunction
 
             //var respMsg = await uploadResp.Content.ReadAsStringAsync();
 
-            //Log.Error($"Azure function not deployed: {respMsg}");
             Log.Error($"Request message: {uploadResp.StatusCode}");
             Assert.Fail("Azure function not deployed");
         }
@@ -68,7 +67,6 @@ public class MyAzureFunction
         var getPublishingCredentials = $"https://management.azure.com/subscriptions/{config.SubscriptionId}/resourceGroups/{config.ResourceGroupName}/providers/Microsoft.Web/sites/{config.FunctionAppName}/config/publishingcredentials/list?api-version=2019-08-01";
         var response = await httpClient.PostAsync(getPublishingCredentials, null);
         var json = await response.Content.ReadAsStringAsync();
-        Log.Information(json);
         var msg = $"Publishing credentials for {config.SubscriptionId}/{config.ResourceGroupName}/{config.FunctionAppName}";
         if (!response.IsSuccessStatusCode)
         {

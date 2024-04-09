@@ -14,7 +14,6 @@ public static class NukeInfrastructureAsCode
 		string iacProjectFolder = pulumiStackName;
 
 		string stackName = $"{pulumiOrganization}/{pulumiStackName}/{stackEnvironment}";
-		Log.Warning($"PulumiToken: {pulumiAccessToken}");
 		var resp = PulumiTasks.PulumiUp(_ => _
 			 //.SetProcessEnvironmentVariable("PULUMI_ACCESS_TOKEN", PulumiAccessToken)
 			 //.SetProcessEnvironmentVariable("ARM_USE_OIDC", ARM_USE_OIDC)
@@ -29,9 +28,9 @@ public static class NukeInfrastructureAsCode
 		var linuxFunctionAppName = variableOutputs.Named("LinuxFunctionAppName");
 		var resourceGroupName = variableOutputs.Named("ResourceGroupName");
 		var storageAccountName = variableOutputs.Named("StorageAccountName");
-		var storageAccountKey = variableOutputs.Named("StorageAccountKey");
+		var storageAccountKey1 = variableOutputs.Named("StorageAccountKey1");
 
-		return (new AzureFunctionConfig(azureSubscriptionId, resourceGroupName, linuxFunctionAppName, azureToken, storageAccountKey), new AzureStorageAccount(storageAccountName));
+		return (new AzureFunctionConfig(azureSubscriptionId, resourceGroupName, linuxFunctionAppName, azureToken, storageAccountKey1), new AzureStorageAccount(storageAccountName));
 	}
 }
 

@@ -25,7 +25,6 @@ public class GetVariableOutput
         // logger($"StackPaht: {_stackPath}");
         // logger($"StackName: {_stackName}");
         // #TODO: Figure out why this hack is necessary
-        // Serilog.Log.Debug($"Looking for propName: {propName}");
         PulumiTasks.PulumiStackSelect(_ => _.SetCwd(_stackPath).SetStackName(_stackName));
 
         return PulumiTasks.PulumiStackOutput(_ => _

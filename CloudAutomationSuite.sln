@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "job-application", "IaC\job-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heiselberg.Mails", "src\Heiselberg.Mails\Heiselberg.Mails.csproj", "{7B441871-BBD3-40AD-96C4-C00F683FFDDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build.Test", "Testing\Build.Test\Build.Test.csproj", "{44DF164B-308C-4FED-91B6-11DF4B00A631}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build.Test", "Testing\Build.Test\Build.Test.csproj", "{44DF164B-308C-4FED-91B6-11DF4B00A631}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{35AFC812-1B5B-4FE5-BA7C-AE2D55190F14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B441871-BBD3-40AD-96C4-C00F683FFDDC} = {35AFC812-1B5B-4FE5-BA7C-AE2D55190F14}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {66D82BF6-6E5C-4BA1-82CF-06400927A72B}

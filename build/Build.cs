@@ -58,7 +58,11 @@ class Build : NukeBuild
 		.DependsOn(IaC)
 		.DependsOn(BuildFrontend)
 			.OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(AzureFunctionConfig.FunctionAppName))
-		.Executes(() => Log.Debug("READY TO DEPLOY!!!"));
+		.Executes(async () =>
+		{
+			Log.Debug("Ready to deploy - lean back and enjoy :)");
+			await NukeDeployToAzure.Execute(AzureFunctionConfig, AzureStorageAccount);
+		});
 	#endregion
 	#region Infrastructure
 	[Parameter("AZURE_SUBSCRIPTION_ID")]
@@ -99,12 +103,10 @@ class Build : NukeBuild
 	private async Task GoDeploy()
 	{
 		Log.Debug("Now deploying the azure function using zip deploy");
-		await ZipDeploy.ThisArtifact(ZipDir).ToAzureFunction(AzureFunctionConfig);
+		await ZipDeploy.ThisArtifact(ZipDir).ToAzureFunctions(AzureFunctionConfig);
 
 		Log.Debug("Now creating the static website");
 		//var azCredential = new DefaultAzureCredential(includeInteractiveCredentials:false);
-		//Log.Debug($"Logged in as: {}");
-
 		var webBlobContainerClient = await AzureBlobClientFactory
 			 .Create(AzureStorageAccount.Name, AzureFunctionConfig.StorageAccountKey)
 			 .GetWebBlobContainerClient();
