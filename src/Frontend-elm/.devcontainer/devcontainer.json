@@ -11,8 +11,7 @@
 		"vscode": {
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
-				"Elmtooling.elm-ls-vscode",
-				"ritwickdey.LiveServer"
+				"Elmtooling.elm-ls-vscode"
 			]
 		}
 	},

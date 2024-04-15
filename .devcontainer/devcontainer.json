@@ -22,7 +22,8 @@
         "k--kato.docomment",
         "EditorConfig.EditorConfig",
         "ms-dotnettools.csdevkit",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "Elmtooling.elm-ls-vscode"
       ]
     }
   },
