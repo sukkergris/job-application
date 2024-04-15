@@ -9,6 +9,7 @@ import ContentText exposing (..)
 import Element exposing (Element, Length, fill, paddingXY, paragraph, width)
 import Element.Background
 import Element.Font
+import Element.Border
 import HeiselbergButtons exposing (toggleThemeBtn)
 import HeiselbergMsg exposing (..)
 import Html
@@ -83,6 +84,11 @@ viewLayout model =
                 , content = ContentText.developerArticle
                 }
             , card { headline = ".NET Udvikler", imageUrl = "", teaserText = "Siden 2008" }
+            , Element.el [
+                Element.Background.color model.primaryDark
+                , Element.padding 36
+                , Element.Border.rounded 6 ]
+                (Element.text "TEST")
             , About.About.about
             , headlineParagrph model
             , profileImage

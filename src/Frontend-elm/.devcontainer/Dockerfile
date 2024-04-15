@@ -1,5 +1,8 @@
 FROM mcr.microsoft.com/devcontainers/javascript-node:20
 
+RUN apt-get update
+RUN apt-get install dos2unix
+
 # Configuring Elm version
 ARG ELM_VERSION=latest-0.19.1
 ARG ELM_TEST_VERSION=latest-0.19.1
@@ -17,16 +20,17 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     elm@${ELM_VERSION} \
     elm-test@${ELM_TEST_VERSION} \
     elm-format@${ELM_FORMAT_VERSION} \
+    elm-watch@beta \
     #
     # [Optional] Update UID/GID if needed
     && if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
-        groupmod --gid $USER_GID $USERNAME \
-        && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
-        && chown -R $USER_UID:$USER_GID /home/$USERNAME; \
+    groupmod --gid $USER_GID $USERNAME \
+    && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
+    && chown -R $USER_UID:$USER_GID /home/$USERNAME; \
     fi \
     # Create the elm cache directory where we can mount a volume. If we don't create it like this
     # it is auto created by docker on volume creation but with root as owner which makes it unusable.
     && mkdir /home/$USERNAME/.elm \
     && chown $USERNAME:$USERNAME /home/$USERNAME/.elm
 
-RUN npm install -g run elm-test elm-format elm-watch@beta
+SHELL ["/bin/zsh"]

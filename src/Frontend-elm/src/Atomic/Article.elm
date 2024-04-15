@@ -21,8 +21,10 @@ styledArticleParagraph theme =
         , paddingXY 0 22
         , Element.centerX
         , Element.Border.width 10
-        , Element.Border.color theme.background
+        , Element.Border.rounded 60
+        , Element.Border.width 4
         ]
+
 
 
 article : Theme -> Content -> Element msg
@@ -31,7 +33,7 @@ article theme c =
         [ el [ paddingXY 22 0, Element.Font.size 30 ] (text c.headline)
         , image [ height fill, width fill, paddingXY 0 22 ]
             { src = c.imageUrl
-            , description = "Stort billede af Theodor A. H. Heiselberg"
+            , description = "Stort billede af Theodor A. H. Heiselberg ss"
             }
         , paragraph [ paddingXY 22 0 ]
             [ el [] (text c.content)

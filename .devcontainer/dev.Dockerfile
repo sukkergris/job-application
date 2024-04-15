@@ -1,8 +1,7 @@
 FROM mcr.microsoft.com/devcontainers/javascript-node:latest
 # Base image
 
-RUN apt-get update -y
-
+RUN apt-get update -y && apt-get install dos2unix
 # Configuring Elm version
 ARG ELM_VERSION=latest-0.19.1
 ARG ELM_TEST_VERSION=latest-0.19.1

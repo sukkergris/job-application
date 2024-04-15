@@ -3,6 +3,10 @@
   "build": {
     "dockerfile": "dev.Dockerfile"
   },
+  // In order to make elm-watch pick up changes
+  "containerEnv": {
+    "CHOKIDAR_USEPOLLING": "true"
+  },
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/root/.pulumi/bin:/home/node/.dotnet/tools"
   },
