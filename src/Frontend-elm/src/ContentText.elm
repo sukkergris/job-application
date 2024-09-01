@@ -23,4 +23,4 @@ headlineTxt =
 
 developerArticle : String
 developerArticle =
-    "Siden 2016 her jeg hovedsagligt arbejdet med web. Og som .NET udviker er der nærmest uendelige muligheder for at løse opgaver til web.\\n Men..."
+    "Siden 2016 her jeg hovedsagligt arbejdet med web. Og som .NET udviker er der nærmest uendelige muligheder for at løse opgaver til web.\\n Men...Nu skal der leges igen!"
