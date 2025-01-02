@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:latest
+FROM mcr.microsoft.com/devcontainers/javascript-node:20
 # Base image
 
 RUN apt-get update -y && apt-get install dos2unix

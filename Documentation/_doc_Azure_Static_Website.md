@@ -58,3 +58,10 @@ An error with red ink will appear if you didn't add the DNS record in CLOUDFLARE
 7. Validate domain ownership
 
 Add dns records
+
+### CLOUDFLARE
+
+Add Page rule for www
+
+![Add page rule](/Documentation/Screenshots/CLOUDFLARE-page-rule-for-www.png)
+

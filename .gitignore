@@ -3,6 +3,7 @@
 **/*.secret
 **/secrets.env
 **/pulumi.env
+**/.playground
 ## Ignore /build/Porperties/launchSettings.json
 ## Each dev must chose and setup how to debug in hes/hers prefered environment
 
@@ -421,3 +422,6 @@ repl-temp-*
 src/Frontend-elm/wwwroot/elm.js
 IaC/.mono/registry/CurrentUser/software/microsoft/csdevkit/telemetry/persistentpropertybag/microsoft.visualstudio.code.servicehost/values.xml
 /src/Heiselberg.Mails/Properties
+
+**/*/.DS_Store
+.DS_Store
